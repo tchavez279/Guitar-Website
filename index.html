@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GuitarMatch — Find Your Perfect Guitar</title>
+  <meta name="description" content="Find the perfect guitar in minutes. Take our personalized quiz or use Quick Find for instant recommendations. Beginner to pro."/>
+  <meta name="keywords" content="best guitar, guitar recommendations, beginner guitar, electric guitar, acoustic guitar, guitar finder"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --cream:#F5F0E8;--ink:#1A1610;--warm:#8B4513;--gold:#C8922A;
+    --rust:#C04A1A;--muted:#7A6F62;--light:#EDE8DF;--white:#FDFAF5;
+    --font-d:'Playfair Display',Georgia,serif;--font-b:'DM Sans',sans-serif;
+    --rad:5px;--sh:0 2px 24px rgba(26,22,16,.08);--sh-lg:0 8px 48px rgba(26,22,16,.14);
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-b);background:var(--cream);color:var(--ink);line-height:1.6}
+  a{color:inherit}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:200;background:rgba(245,240,232,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(26,22,16,.08);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(1.5rem,5vw,4rem)}
+  .logo{font-family:var(--font-d);font-size:1.35rem;text-decoration:none;display:flex;align-items:center;gap:.4rem}
+  .logo-g{color:var(--gold)}
+  .nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
+  .nav-links a{text-decoration:none;color:var(--muted);font-size:.88rem;font-weight:500;transition:color .2s}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-cta{background:var(--ink)!important;color:var(--cream)!important;padding:.45rem 1.1rem;border-radius:var(--rad);transition:background .2s!important}
+  .nav-cta:hover{background:var(--warm)!important}
+
+  /* HERO */
+  #hero{min-height:calc(100vh - 64px);display:flex;flex-direction:column;justify-content:center;padding:clamp(3rem,8vw,6rem) clamp(1.5rem,5vw,4rem);position:relative;overflow:hidden;max-width:700px}
+  #hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 75% 45%,rgba(200,146,42,.09) 0%,transparent 70%);pointer-events:none}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem}
+  .hero-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--gold)}
+  h1{font-family:var(--font-d);font-size:clamp(2.8rem,5vw,4.6rem);line-height:1.08;letter-spacing:-.025em;margin-bottom:1.25rem}
+  h1 em{font-style:italic;color:var(--gold)}
+  .hero-sub{font-size:1.05rem;color:var(--muted);max-width:420px;margin-bottom:2rem;font-weight:300}
+  .hero-paths{display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem}
+  .path-card{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.4rem;border-radius:8px;text-decoration:none;cursor:pointer;border:none;font-family:var(--font-b);text-align:left;transition:transform .2s,box-shadow .2s;width:100%}
+  .path-card:hover{transform:translateY(-2px);box-shadow:var(--sh-lg)}
+  .path-primary{background:var(--ink);color:var(--cream)}
+  .path-secondary{background:var(--white);color:var(--ink);border:1.5px solid rgba(26,22,16,.14);box-shadow:var(--sh)}
+  .path-icon{font-size:1.8rem;flex-shrink:0}
+  .path-info{flex:1}
+  .path-label{font-size:1rem;font-weight:600;display:block}
+  .path-desc{font-size:.82rem;opacity:.7}
+  .path-arrow{font-size:1.1rem;flex-shrink:0;transition:transform .2s}
+  .path-card:hover .path-arrow{transform:translateX(4px)}
+  .path-tag{display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--gold);color:#fff;padding:.13rem .42rem;border-radius:3px;margin-left:.4rem;vertical-align:middle}
+  .hero-trust{display:flex;align-items:center;gap:1.25rem;font-size:.82rem;color:var(--muted);flex-wrap:wrap}
+  .trust-dot{width:3px;height:3px;border-radius:50%;background:var(--muted)}
+  
+
+  /* QUICK FIND MODAL */
+  .modal-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(26,22,16,.6);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1.5rem}
+  .modal-overlay.open{display:flex}
+  .modal{background:var(--white);border-radius:16px;max-width:600px;width:100%;padding:2.5rem;position:relative;box-shadow:var(--sh-lg);animation:modalIn .25s ease;max-height:90vh;overflow-y:auto}
+  @keyframes modalIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+  .modal-close{position:absolute;top:1.2rem;right:1.2rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);line-height:1;padding:.3rem;transition:color .2s}
+  .modal-close:hover{color:var(--ink)}
+  .modal-eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem}
+  .modal h2{font-family:var(--font-d);font-size:1.75rem;margin-bottom:.4rem}
+  .modal-sub{color:var(--muted);font-size:.9rem;margin-bottom:2rem}
+  .qf-row{margin-bottom:1.25rem}
+  .qf-label{font-size:.78rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:.55rem;display:block}
+  .qf-chips{display:flex;flex-wrap:wrap;gap:.45rem}
+  .chip{padding:.4rem .85rem;border-radius:99px;border:1.5px solid rgba(26,22,16,.14);background:var(--cream);font-family:var(--font-b);font-size:.84rem;cursor:pointer;transition:all .15s;color:var(--ink)}
+  .chip:hover{border-color:var(--gold);background:rgba(200,146,42,.07)}
+  .chip.sel{border-color:var(--gold);background:rgba(200,146,42,.12);font-weight:600}
+  .btn-qf-go{width:100%;padding:1rem;margin-top:1.5rem;background:var(--ink);color:var(--cream);border:none;border-radius:var(--rad);font-family:var(--font-b);font-size:1rem;font-weight:600;cursor:pointer;transition:background .2s;letter-spacing:.01em}
+  .btn-qf-go:hover{background:var(--warm)}
+  .btn-qf-go:disabled{opacity:.35;cursor:not-allowed}
+
+  /* SECTIONS */
+  .sec{padding:clamp(4rem,8vw,7rem) clamp(1.5rem,5vw,4rem)}
+  .sec-label{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem}
+  .sec-title{font-family:var(--font-d);font-size:clamp(1.9rem,3vw,2.8rem);line-height:1.15;letter-spacing:-.02em;margin-bottom:2.5rem}
+
+  /* HOW IT WORKS */
+  #how{background:var(--white)}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+  .step{padding:2rem;background:var(--cream);border-radius:8px;border:1px solid rgba(26,22,16,.06);transition:box-shadow .25s}
+  .step:hover{box-shadow:var(--sh)}
+  .step-num{font-family:var(--font-d);font-size:3rem;font-weight:900;color:rgba(200,146,42,.18);line-height:1;margin-bottom:.75rem}
+  .step h3{font-family:var(--font-d);font-size:1.15rem;margin-bottom:.4rem}
+  .step p{font-size:.88rem;color:var(--muted);line-height:1.7}
+
+  /* QUIZ */
+  .quiz-wrapper{max-width:700px;margin:0 auto}
+  .qz-progress{margin-bottom:2rem}
+  .qz-prog-meta{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-bottom:.6rem}
+  .qz-bar{height:3px;background:rgba(26,22,16,.1);border-radius:2px;overflow:hidden}
+  .qz-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--rust));transition:width .5s cubic-bezier(.4,0,.2,1)}
+  .quiz-card{background:var(--white);border-radius:12px;padding:clamp(1.75rem,4vw,3rem);box-shadow:var(--sh);border:1px solid rgba(26,22,16,.06);min-height:400px;display:flex;flex-direction:column}
+  .q-num{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:.75rem}
+  .q-text{font-family:var(--font-d);font-size:clamp(1.3rem,2.5vw,1.85rem);line-height:1.2;margin-bottom:.4rem}
+  .q-sub{color:var(--muted);font-size:.88rem;margin-bottom:1.75rem}
+  .opts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.65rem;flex:1}
+  .opt{padding:.85rem 1rem;border:1.5px solid rgba(26,22,16,.11);border-radius:6px;background:var(--cream);cursor:pointer;font-family:var(--font-b);font-size:.9rem;color:var(--ink);text-align:left;transition:all .15s;display:flex;align-items:flex-start;gap:.5rem;line-height:1.3}
+  .opt:hover{border-color:var(--gold);background:rgba(200,146,42,.06)}
+  .opt.sel{border-color:var(--gold);background:rgba(200,146,42,.11);font-weight:600}
+  .opt-ic{font-size:1.1rem;flex-shrink:0;margin-top:.05rem}
+  .qz-nav{display:flex;align-items:center;justify-content:space-between;margin-top:2rem;padding-top:1.25rem;border-top:1px solid rgba(26,22,16,.07)}
+  .btn-back{background:none;border:none;cursor:pointer;color:var(--muted);font-family:var(--font-b);font-size:.88rem;display:flex;align-items:center;gap:.3rem;transition:color .2s}
+  .btn-back:hover{color:var(--ink)}
+  .btn-next{display:inline-flex;align-items:center;gap:.5rem;background:var(--ink);color:var(--cream);border:none;border-radius:var(--rad);padding:.8rem 1.6rem;font-family:var(--font-b);font-size:.92rem;font-weight:600;cursor:pointer;transition:background .2s,transform .15s}
+  .btn-next:hover{background:var(--warm);transform:translateY(-1px)}
+  .btn-next:disabled{opacity:.35;cursor:not-allowed;transform:none}
+
+  /* RESULTS */
+  #results-section{display:none}
+  .results-hd{max-width:700px;margin:0 auto 2.5rem}
+  .results-hd h2{font-family:var(--font-d);font-size:clamp(1.9rem,3vw,2.6rem);margin-bottom:.5rem}
+  .results-hd p{color:var(--muted);font-size:.95rem}
+  .guitars-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.5rem;max-width:1080px;margin:0 auto}
+  .g-card{background:var(--white);border-radius:10px;overflow:hidden;box-shadow:var(--sh);border:1px solid rgba(26,22,16,.06);transition:transform .25s,box-shadow .25s;opacity:0;transform:translateY(18px);animation:cardIn .5s ease forwards}
+  .g-card:hover{transform:translateY(-4px);box-shadow:var(--sh-lg)}
+  @keyframes cardIn{to{opacity:1;transform:none}}
+  .g-card:nth-child(2){animation-delay:.1s}.g-card:nth-child(3){animation-delay:.18s}.g-card:nth-child(4){animation-delay:.26s}.g-card:nth-child(5){animation-delay:.34s}
+    .g-img{height:220px;background:var(--light);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+  .g-img-photo{background:#fff}
+  .g-img-photo img{width:100%;height:100%;object-fit:contain;padding:12px;display:block;transition:transform .3s}
+  .g-card:hover .g-img-photo img{transform:scale(1.04)}
+  .g-img-fallback{font-size:4.5rem}
+
+  .g-brand{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;margin-bottom:.2rem}
+  .g-name{font-family:var(--font-d);font-size:1.15rem;margin-bottom:.65rem}
+  .g-bands{font-size:.75rem;color:var(--muted);font-style:italic;margin-bottom:.6rem;line-height:1.4;}
+  .g-why{font-size:.83rem;color:var(--muted);line-height:1.6;margin-bottom:.9rem;padding:.65rem .75rem;background:rgba(200,146,42,.06);border-left:2px solid var(--gold);border-radius:0 4px 4px 0}
+  .g-specs{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.1rem}
+  .spec{font-size:.71rem;background:var(--light);color:var(--muted);padding:.18rem .55rem;border-radius:3px;font-weight:500}
+  .g-foot{display:flex;align-items:center;justify-content:space-between}
+  .g-price{font-size:1.05rem;font-weight:600}
+  .g-rating{font-size:.78rem;color:var(--muted)}
+  .g-stars{color:var(--gold)}
+  .btn-deal{background:var(--gold);color:#fff;border:none;border-radius:var(--rad);padding:.5rem 1rem;font-family:var(--font-b);font-size:.82rem;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;transition:background .2s}
+  .btn-deal:hover{background:var(--rust)}
+
+  /* EMAIL */
+  .email-cap{max-width:700px;margin:3rem auto 0;background:var(--ink);border-radius:12px;padding:2.5rem;display:flex;gap:2rem;align-items:center;flex-wrap:wrap;animation:cardIn .5s .35s ease both}
+  .email-cap-text{flex:1;min-width:200px}
+  .email-cap-text h3{font-family:var(--font-d);color:var(--cream);font-size:1.3rem;margin-bottom:.35rem}
+  .email-cap-text p{color:rgba(245,240,232,.6);font-size:.86rem}
+  .email-form{display:flex;gap:.6rem;flex:1;min-width:220px}
+  .email-input{flex:1;padding:.8rem 1rem;border-radius:var(--rad);border:none;font-family:var(--font-b);font-size:.9rem;background:rgba(255,255,255,.1);color:var(--cream);outline:none}
+  .email-input::placeholder{color:rgba(245,240,232,.4)}
+  .email-input:focus{background:rgba(255,255,255,.16)}
+  .btn-sub{padding:.8rem 1.2rem;background:var(--gold);color:#fff;border:none;border-radius:var(--rad);font-family:var(--font-b);font-size:.88rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .2s}
+  .btn-sub:hover{background:var(--rust)}
+  .retake-wrap{text-align:center;margin-top:2.5rem}
+  .results-actions{display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:2.5rem;flex-wrap:wrap}
+  .btn-more{display:inline-flex;align-items:center;gap:.5rem;background:var(--ink);color:var(--cream);border:none;border-radius:var(--rad);padding:.8rem 1.6rem;font-family:var(--font-b);font-size:.92rem;font-weight:600;cursor:pointer;transition:background .2s,transform .15s}
+  .btn-more:hover{background:var(--warm);transform:translateY(-1px)}
+  .btn-more:disabled{opacity:.4;cursor:not-allowed;transform:none}
+  .btn-again{display:inline-flex;align-items:center;gap:.5rem;background:none;border:1.5px solid rgba(26,22,16,.2);color:var(--ink);padding:.8rem 1.6rem;border-radius:var(--rad);font-family:var(--font-b);font-size:.92rem;font-weight:500;cursor:pointer;transition:border-color .2s,background .2s}
+  .btn-again:hover{border-color:var(--ink);background:rgba(26,22,16,.04)}
+  .btn-retake{background:none;border:1.5px solid rgba(26,22,16,.18);color:var(--ink);padding:.7rem 1.75rem;border-radius:var(--rad);font-family:var(--font-b);font-size:.9rem;cursor:pointer;transition:border-color .2s}
+  .btn-retake:hover{border-color:var(--ink)}
+
+  /* BLOG */
+  #learn{background:var(--white)}
+  .blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.5rem}
+  .blog-card{background:var(--cream);border-radius:8px;overflow:hidden;border:1px solid rgba(26,22,16,.07);text-decoration:none;color:var(--ink);transition:transform .22s,box-shadow .22s;display:block}
+  .blog-card:hover{transform:translateY(-3px);box-shadow:var(--sh)}
+  .blog-thumb{height:130px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:3.2rem}
+  .blog-body{padding:1.2rem}
+  .blog-cat{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
+  .blog-title{font-family:var(--font-d);font-size:1.02rem;line-height:1.3;margin-bottom:.5rem}
+  .blog-meta{font-size:.76rem;color:var(--muted)}
+  .blog-cta{margin-top:2.5rem;text-align:center}
+  .btn-outline{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 1.75rem;border:1.5px solid var(--ink);border-radius:var(--rad);font-family:var(--font-b);font-size:.9rem;font-weight:500;color:var(--ink);text-decoration:none;transition:background .2s,color .2s;cursor:pointer;background:none}
+  .btn-outline:hover{background:var(--ink);color:var(--cream)}
+
+  /* TRUST */
+  #trust{background:var(--ink);color:var(--cream);padding:3.5rem clamp(1.5rem,5vw,4rem);display:flex;justify-content:space-around;flex-wrap:wrap;gap:2rem}
+  .trust-item{text-align:center}
+  .trust-num{font-family:var(--font-d);font-size:2.2rem;color:var(--gold);display:block}
+  .trust-lbl{font-size:.8rem;opacity:.55;margin-top:.2rem}
+
+  /* FOOTER */
+  footer{background:var(--cream);border-top:1px solid rgba(26,22,16,.1);padding:3rem clamp(1.5rem,5vw,4rem) 2rem}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:2.5rem}
+  .footer-brand .logo{display:inline-flex;margin-bottom:.75rem}
+  .footer-brand p{font-size:.84rem;color:var(--muted);max-width:250px;line-height:1.65}
+  .footer-col h4{font-family:var(--font-d);font-size:.92rem;margin-bottom:.9rem}
+  .footer-col ul{list-style:none}
+  .footer-col li{margin-bottom:.5rem}
+  .footer-col a{font-size:.83rem;color:var(--muted);text-decoration:none;transition:color .2s}
+  .footer-col a:hover{color:var(--ink)}
+  .footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;padding-top:1.5rem;border-top:1px solid rgba(26,22,16,.08)}
+  .footer-bottom p{font-size:.78rem;color:var(--muted)}
+  .affiliate-note{font-size:.74rem;color:var(--muted);max-width:420px;text-align:right;line-height:1.5}
+
+  /* VISUAL BODY STYLE CARDS */
+  .body-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;flex:1;align-content:start}
+  .body-card svg{width:100%;height:auto;max-height:150px;display:block;filter:drop-shadow(0 2px 6px rgba(26,22,16,.15))}
+  .body-card{border:2px solid rgba(26,22,16,.1);border-radius:10px;background:var(--white);cursor:pointer;padding:1.1rem .7rem .9rem;display:flex;flex-direction:column;align-items:center;gap:.3rem;transition:all .18s;text-align:center;box-shadow:0 1px 6px rgba(26,22,16,.07)}
+  .body-card:hover{border-color:var(--gold);background:rgba(200,146,42,.06);transform:translateY(-1px)}
+  .body-card.sel{border-color:var(--gold);background:rgba(200,146,42,.1);box-shadow:0 0 0 3px rgba(200,146,42,.18)}
+  .body-card svg{display:block;width:64px;height:90px}
+  .body-card-name{font-size:.88rem;font-weight:600;color:var(--ink);line-height:1.2}
+  .body-card-sub{font-size:.72rem;color:var(--muted)}
+  .body-card-genres{font-size:.68rem;color:var(--gold);font-weight:500;margin-top:.1rem}
+  .body-card-bands{font-size:.64rem;color:var(--muted);margin-top:.1rem;line-height:1.3;font-style:italic}
+  .body-card-none{grid-column:1/-1;flex-direction:row;justify-content:center;gap:.75rem;padding:.6rem 1rem;min-height:auto!important}
+  /* VISUAL PICKUP CARDS */
+  .pickup-grid{display:flex;flex-direction:column;gap:.75rem;flex:1}
+  .pickup-card{border:1.5px solid rgba(26,22,16,.11);border-radius:8px;background:var(--cream);cursor:pointer;padding:1rem 1.2rem;display:flex;gap:1rem;align-items:flex-start;transition:all .15s}
+  .pickup-card:hover{border-color:var(--gold);background:rgba(200,146,42,.06)}
+  .pickup-card.sel{border-color:var(--gold);background:rgba(200,146,42,.11);box-shadow:0 0 0 3px rgba(200,146,42,.15)}
+  .pickup-visual{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:.3rem;width:68px}
+  .pickup-visual svg{display:block}
+  .pickup-label-sm{font-size:.65rem;color:var(--muted);text-align:center;line-height:1.2}
+  .pickup-info{flex:1;min-width:0}
+  .pickup-name{font-size:.95rem;font-weight:600;margin-bottom:.15rem}
+  .pickup-sub{font-size:.8rem;color:var(--gold);font-weight:500;margin-bottom:.4rem}
+  .pickup-tone{font-size:.8rem;color:var(--muted);line-height:1.55;margin-bottom:.4rem}
+  .pickup-meta{display:flex;flex-wrap:wrap;gap:.3rem}
+  .pickup-tag{font-size:.68rem;background:var(--light);color:var(--muted);padding:.15rem .5rem;border-radius:3px;font-weight:500}
+  .pickup-tag-gold{font-size:.68rem;background:rgba(200,146,42,.12);color:var(--warm);padding:.15rem .5rem;border-radius:3px;font-weight:500}
+  @media(max-width:500px){.body-grid{grid-template-columns:repeat(2,1fr)}}
+  /* TOAST */
+  .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--cream);padding:.9rem 1.75rem;border-radius:99px;font-size:.9rem;font-weight:500;z-index:9999;box-shadow:var(--sh-lg);transition:transform .35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+
+  /* RESPONSIVE */
+  @media(max-width:820px){#hero{min-height:auto;padding:3rem 1.5rem}.steps{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.nav-links{display:none}.footer-grid{grid-template-columns:1fr;gap:2rem}.affiliate-note{text-align:left}.email-form{flex-direction:column}}
+  </style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo"><span class="logo-g">♩</span> GuitarMatch</a>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#quiz-section">Full Quiz</a></li>
+    <li><a href="#learn">Learn</a></li>
+    <li><a href="#" onclick="openQF(event)" class="nav-cta">Quick Find ⚡</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-text">
+    <div class="hero-eyebrow">Guitar Matchmaking</div>
+    <h1>Find the guitar<br/><em>made for you.</em></h1>
+    <p class="hero-sub">Personalized recommendations for every skill level and budget. Two ways to find your match — deep or instant.</p>
+    <div class="hero-paths">
+      <button class="path-card path-primary" onclick="document.getElementById('quiz-section').scrollIntoView({behavior:'smooth'})">
+        <span class="path-icon">🎸</span>
+        <span class="path-info">
+          <span class="path-label">Take the Full Quiz</span>
+          <span class="path-desc">8 questions · 2 minutes · Best results</span>
+        </span>
+        <span class="path-arrow">→</span>
+      </button>
+      <button class="path-card path-secondary" onclick="openQF(event)">
+        <span class="path-icon">⚡</span>
+        <span class="path-info">
+          <span class="path-label">Quick Find <span class="path-tag">New</span></span>
+          <span class="path-desc">Already know what you want? Instant answers in 30 seconds.</span>
+        </span>
+        <span class="path-arrow">→</span>
+      </button>
+    </div>
+    <div class="hero-trust">
+      <span>Free forever</span><span class="trust-dot"></span>
+      <span>No sign up</span><span class="trust-dot"></span>
+      <span>100+ guitars</span><span class="trust-dot"></span>
+      <span>Real affiliate links</span>
+    </div>
+  </div>
+
+</section>
+
+<!-- QUICK FIND MODAL -->
+<div class="modal-overlay" id="qf-overlay" onclick="closeQFOutside(event)">
+  <div class="modal" id="qf-modal">
+    <button class="modal-close" onclick="closeQF()">✕</button>
+    <div class="modal-eyebrow">⚡ Quick Find — 30 seconds</div>
+    <h2>Tell us what you know</h2>
+    <p class="modal-sub">Select anything that applies. You don't have to fill everything in.</p>
+    <div class="qf-row">
+      <span class="qf-label">Skill level</span>
+      <div class="qf-chips">
+        <button class="chip" data-g="skill" data-v="beginner" onclick="qfPick(this,'skill',false)">🌱 Beginner</button>
+        <button class="chip" data-g="skill" data-v="intermediate" onclick="qfPick(this,'skill',false)">🎸 Intermediate</button>
+        <button class="chip" data-g="skill" data-v="advanced" onclick="qfPick(this,'skill',false)">⚡ Advanced</button>
+      </div>
+    </div>
+    <div class="qf-row">
+      <span class="qf-label">Budget</span>
+      <div class="qf-chips">
+        <button class="chip" data-g="budget" data-v="under200" onclick="qfPick(this,'budget',false)">Under $200</button>
+        <button class="chip" data-g="budget" data-v="200to500" onclick="qfPick(this,'budget',false)">$200–$500</button>
+        <button class="chip" data-g="budget" data-v="500to1000" onclick="qfPick(this,'budget',false)">$500–$1k</button>
+        <button class="chip" data-g="budget" data-v="over1000" onclick="qfPick(this,'budget',false)">$1k+</button>
+      </div>
+    </div>
+    <div class="qf-row">
+      <span class="qf-label">Guitar type</span>
+      <div class="qf-chips">
+        <button class="chip" data-g="type" data-v="electric" onclick="qfPick(this,'type',false)">⚡ Electric</button>
+        <button class="chip" data-g="type" data-v="acoustic" onclick="qfPick(this,'type',false)">🎵 Acoustic</button>
+        <button class="chip" data-g="type" data-v="acoustic-electric" onclick="qfPick(this,'type',false)">🔌 Acoustic-Electric</button>
+      </div>
+    </div>
+    <div class="qf-row">
+      <span class="qf-label">Genre (pick all that apply)</span>
+      <div class="qf-chips">
+        <button class="chip" data-g="genres" data-v="rock" onclick="qfPick(this,'genres',true)">🤘 Rock</button>
+        <button class="chip" data-g="genres" data-v="metal" onclick="qfPick(this,'genres',true)">💀 Metal</button>
+        <button class="chip" data-g="genres" data-v="blues" onclick="qfPick(this,'genres',true)">🎷 Blues</button>
+        <button class="chip" data-g="genres" data-v="jazz" onclick="qfPick(this,'genres',true)">🎺 Jazz</button>
+        <button class="chip" data-g="genres" data-v="country" onclick="qfPick(this,'genres',true)">🤠 Country</button>
+        <button class="chip" data-g="genres" data-v="pop" onclick="qfPick(this,'genres',true)">✨ Pop</button>
+        <button class="chip" data-g="genres" data-v="indie" onclick="qfPick(this,'genres',true)">🌿 Indie</button>
+        <button class="chip" data-g="genres" data-v="folk" onclick="qfPick(this,'genres',true)">🍂 Folk</button>
+        <button class="chip" data-g="genres" data-v="worship" onclick="qfPick(this,'genres',true)">🎼 Worship</button>
+        <button class="chip" data-g="genres" data-v="punk" onclick="qfPick(this,'genres',true)">💥 Punk</button>
+      </div>
+    </div>
+    <div class="qf-row">
+      <span class="qf-label">Body style (optional)</span>
+      <div class="qf-chips">
+        <button class="chip" data-g="bodyStyle" data-v="strat" onclick="qfPick(this,'bodyStyle',false)">Strat</button>
+        <button class="chip" data-g="bodyStyle" data-v="tele" onclick="qfPick(this,'bodyStyle',false)">Tele</button>
+        <button class="chip" data-g="bodyStyle" data-v="lespaul" onclick="qfPick(this,'bodyStyle',false)">Les Paul</button>
+        <button class="chip" data-g="bodyStyle" data-v="hollow" onclick="qfPick(this,'bodyStyle',false)">Hollow/Semi</button>
+        <button class="chip" data-g="bodyStyle" data-v="modern" onclick="qfPick(this,'bodyStyle',false)">Modern/Metal</button>
+      </div>
+    </div>
+    <button class="btn-qf-go" id="qf-go" disabled onclick="runQF()">Show my guitars →</button>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="sec">
+  <div class="sec-label">Simple process</div>
+  <h2 class="sec-title">Two ways to find your guitar</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Pick your path</h3>
+      <p>Take the full 2-minute quiz for maximum accuracy, or hit Quick Find if you already know the basics — type, budget, genre.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Tell us your style</h3>
+      <p>Skill level, budget, genre, body shape — a few choices let our engine cut thousands of options down to your exact fit.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Get matched instantly</h3>
+      <p>We surface your top guitars with plain-English explanations, real specs, ratings, and direct links to buy from trusted retailers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FULL QUIZ -->
+<section id="quiz-section" class="sec">
+  <div class="quiz-wrapper">
+    <div class="sec-label">The full quiz</div>
+    <h2 class="sec-title" style="margin-bottom:1.75rem">Find your perfect match</h2>
+    <div class="qz-progress">
+      <div class="qz-prog-meta">
+        <span id="step-label">Question 1 of 8</span>
+        <span id="step-pct">0%</span>
+      </div>
+      <div class="qz-bar"><div class="qz-fill" id="qz-fill" style="width:0%"></div></div>
+    </div>
+    <div class="quiz-card" id="quiz-card"></div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results-section" class="sec">
+  <div class="results-hd">
+    <div class="sec-label">Your matches</div>
+    <h2>Here are your guitars</h2>
+    <p id="results-intro">Based on your selections, here are the best guitars for you.</p>
+  </div>
+  <div class="guitars-grid" id="guitars-grid"></div>
+  <div class="email-cap" id="email-cap">
+    <div class="email-cap-text">
+      <h3>Get gear alerts &amp; guides</h3>
+      <p>New deals, buying guides, and picks for your style — straight to your inbox.</p>
+    </div>
+    <div class="email-form">
+      <input class="email-input" type="email" id="email-input" placeholder="your@email.com"/>
+      <button class="btn-sub" onclick="subEmail()">Subscribe</button>
+    </div>
+  </div>
+  <div class="results-actions" id="results-actions">
+    <button class="btn-more" id="btn-load-more" onclick="loadMore()">Load more guitars →</button>
+    <button class="btn-again" onclick="retake()">↺ Start over</button>
+  </div>
+</section>
+
+<!-- LEARN / BLOG -->
+<section id="learn" class="sec">
+  <div class="sec-label">Guitar guides</div>
+  <h2 class="sec-title">Learn before you buy</h2>
+  <div class="blog-grid">
+    <a href="#" class="blog-card"><div class="blog-thumb">🎸</div><div class="blog-body"><div class="blog-cat">Buying Guide</div><div class="blog-title">The 10 Best Beginner Guitars of 2024</div><div class="blog-meta">8 min read · Updated Dec 2024</div></div></a>
+    <a href="#" class="blog-card"><div class="blog-thumb">⚡</div><div class="blog-body"><div class="blog-cat">Comparison</div><div class="blog-title">Electric vs Acoustic: Which Should You Start With?</div><div class="blog-meta">6 min read · Updated Nov 2024</div></div></a>
+    <a href="#" class="blog-card"><div class="blog-thumb">💰</div><div class="blog-body"><div class="blog-cat">Budget Picks</div><div class="blog-title">Best Guitars Under $300 That Don't Feel Cheap</div><div class="blog-meta">7 min read · Updated Dec 2024</div></div></a>
+    <a href="#" class="blog-card"><div class="blog-thumb">🎵</div><div class="blog-body"><div class="blog-cat">Gear 101</div><div class="blog-title">Single Coil vs Humbucker: A Plain-English Guide</div><div class="blog-meta">5 min read · Updated Oct 2024</div></div></a>
+    <a href="#" class="blog-card"><div class="blog-thumb">🏆</div><div class="blog-body"><div class="blog-cat">Premium Picks</div><div class="blog-title">Best Guitars Over $1,000 Worth Every Penny</div><div class="blog-meta">9 min read · Updated Dec 2024</div></div></a>
+    <a href="#" class="blog-card"><div class="blog-thumb">🤘</div><div class="blog-body"><div class="blog-cat">Genre Guide</div><div class="blog-title">The Best Metal Guitars at Every Price Point</div><div class="blog-meta">7 min read · Updated Nov 2024</div></div></a>
+  </div>
+  <div class="blog-cta"><button class="btn-outline">View all guides →</button></div>
+</section>
+
+<!-- TRUST -->
+<section id="trust">
+  <div class="trust-item"><span class="trust-num">100+</span><span class="trust-lbl">Guitars in database</span></div>
+  <div class="trust-item"><span class="trust-num">2 min</span><span class="trust-lbl">Full quiz time</span></div>
+  <div class="trust-item"><span class="trust-num">30 sec</span><span class="trust-lbl">Quick Find time</span></div>
+  <div class="trust-item"><span class="trust-num">Free</span><span class="trust-lbl">Always, forever</span></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo"><span class="logo-g">♩</span> GuitarMatch</a>
+      <p>Helping guitarists of every level find exactly the right instrument — without the overwhelm.</p>
+    </div>
+    <div class="footer-col"><h4>Find a Guitar</h4><ul>
+      <li><a href="#quiz-section">Full Quiz</a></li>
+      <li><a href="#" onclick="openQF(event)">Quick Find ⚡</a></li>
+      <li><a href="#">Browse All</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Learn</h4><ul>
+      <li><a href="#">Beginner Guides</a></li>
+      <li><a href="#">Electric vs Acoustic</a></li>
+      <li><a href="#">Budget Picks</a></li>
+      <li><a href="#">Genre Guides</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Site</h4><ul>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Affiliate Disclosure</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 GuitarMatch. All rights reserved.</p>
+    <p class="affiliate-note">GuitarMatch participates in affiliate programs. We may earn a commission when you buy through our links, at no extra cost to you.</p>
+  </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════
+   GUITAR DATABASE
+══════════════════════════════════════════ */
+const GUITARS=[
+  {name:"Squier Bullet Stratocaster",brand:"Squier",emoji:"🎸",price:"$179",priceN:179,rating:4.2,reviews:1840,specs:["Basswood body","3x Single coil","C-shape neck","21 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=squier+bullet+stratocaster",productImg:"https://fmedia.fender.com/products/031-0001-506/010-6010-706_ood_hero.png",bands:"Red Hot Chili Peppers · Nirvana · Radiohead",bestFor:{skill:['beginner'],budget:['under200'],type:['electric','unsure'],bodyStyle:['strat','none'],pickups:['single','unsure'],genres:['rock','pop','indie','country','blues']}},
+  {name:"Squier Affinity Telecaster",brand:"Squier",emoji:"📻",price:"$249",priceN:249,rating:4.3,reviews:1200,specs:["Alder body","2x Single coil","Maple neck","21 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=squier+affinity+telecaster",productImg:"https://fmedia.fender.com/products/037-8202-506/image1.jpg",bands:"Rolling Stones · The Clash · Blink-182",bestFor:{skill:['beginner','intermediate'],budget:['under200','200to500'],type:['electric','unsure'],bodyStyle:['tele','none'],pickups:['single','unsure'],genres:['country','rock','blues','pop']}},
+  {name:"Epiphone Les Paul Special",brand:"Epiphone",emoji:"🎵",price:"$199",priceN:199,rating:4.1,reviews:980,specs:["Mahogany body","2x Humbuckers","Rosewood board","22 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=epiphone+les+paul+special",productImg:"https://assets.epiphone.com/Assets/Epiphone-Website/Products/Guitars/Solidbody/Les-Paul/Les-Paul-Special/Les-Paul-Special-TV-Yellow.jpg",bands:"Guns N Roses · Led Zeppelin · Black Sabbath",bestFor:{skill:['beginner'],budget:['under200'],type:['electric','unsure'],bodyStyle:['lespaul','none'],pickups:['humbucker','unsure'],genres:['rock','metal','blues']}},
+  {name:"Jackson JS22 Dinky",brand:"Jackson",emoji:"⚡",price:"$249",priceN:249,rating:4.4,reviews:760,specs:["Poplar body","2x Humbuckers","Compound radius board","24 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=jackson+js22+dinky",productImg:"https://media.jackson.com/is/image/Jackson/2916022503_ins_alt?$supersize$",bands:"Metallica · Pantera · Slayer",bestFor:{skill:['beginner','intermediate'],budget:['200to500','under200'],type:['electric'],bodyStyle:['modern','none'],pickups:['humbucker'],genres:['metal','rock','punk']}},
+  {name:"Yamaha Pacifica 112V",brand:"Yamaha",emoji:"🎸",price:"$349",priceN:349,rating:4.6,reviews:2100,specs:["Alder body","HSS pickups","Maple neck","22 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=yamaha+pacifica+112v",productImg:"https://usa.yamaha.com/files/download/image/3/5873/1076673/pac112v_vs_001.jpg",bands:"Nirvana · Red Hot Chili Peppers · Green Day",bestFor:{skill:['beginner','intermediate'],budget:['200to500'],type:['electric','unsure'],bodyStyle:['strat','none'],pickups:['unsure'],genres:['rock','pop','blues','indie','country']}},
+  {name:"Squier Classic Vibe Stratocaster 50s",brand:"Squier",emoji:"🎸",price:"$499",priceN:499,rating:4.7,reviews:3200,specs:["Alder body","3x Single coil","Maple neck","21 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=squier+classic+vibe+stratocaster+50s",productImg:"https://fmedia.fender.com/products/037-4005-500/0374005500_gtr_frt_001_rr.jpg",bands:"Red Hot Chili Peppers · Radiohead · Oasis",bestFor:{skill:['beginner','intermediate'],budget:['200to500'],type:['electric','unsure'],bodyStyle:['strat'],pickups:['single','unsure'],genres:['rock','pop','indie','blues','country']}},
+  {name:"Squier Classic Vibe Telecaster 60s",brand:"Squier",emoji:"📻",price:"$499",priceN:499,rating:4.7,reviews:1800,specs:["Alder body","2x Single coil","Maple neck","21 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=squier+classic+vibe+telecaster",productImg:"https://fmedia.fender.com/products/037-4060-572/0374060572_gtr_frt_001_rr.jpg",bands:"Rolling Stones · Eagles · The Clash",bestFor:{skill:['beginner','intermediate'],budget:['200to500'],type:['electric','unsure'],bodyStyle:['tele'],pickups:['single','unsure'],genres:['country','rock','blues','indie']}},
+  {name:"Epiphone Les Paul Standard 50s",brand:"Epiphone",emoji:"🎵",price:"$499",priceN:499,rating:4.5,reviews:2400,specs:["Mahogany body","ProBucker HBs","Rosewood board","22 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=epiphone+les+paul+standard+50s",productImg:"https://assets.epiphone.com/Products/Guitars/Solidbody/Les-Paul/2020/LP-Standard-50s/EpiLPStd50sHeritageCherryBurst_1.jpg",bands:"Guns N Roses · Led Zeppelin · AC/DC",bestFor:{skill:['beginner','intermediate'],budget:['200to500'],type:['electric','unsure'],bodyStyle:['lespaul'],pickups:['humbucker','unsure'],genres:['rock','metal','blues']}},
+  {name:"Gretsch G2622 Streamliner",brand:"Gretsch",emoji:"🎺",price:"$449",priceN:449,rating:4.4,reviews:890,specs:["Hollow body","Broad Tron HBs","12 inch radius","22 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=gretsch+g2622+streamliner",productImg:"https://media.gretschguitars.com/is/image/Gretsch/2806220549_ins_alt?$supersize$",bands:"The Beatles · The Rolling Stones · Stray Cats",bestFor:{skill:['intermediate'],budget:['200to500'],type:['electric'],bodyStyle:['hollow'],pickups:['humbucker','unsure'],genres:['jazz','rock','blues','indie']}},
+  {name:"PRS SE Standard 24",brand:"PRS",emoji:"🎸",price:"$499",priceN:499,rating:4.6,reviews:1100,specs:["Mahogany body","PRS HBs","Rosewood board","24 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=prs+se+standard+24",productImg:"https://prsguitars.com/assets/images/guitars/SE_Std24_Translucent_Blue_Front.jpg",bands:"Alter Bridge · Santana · Creed",bestFor:{skill:['beginner','intermediate'],budget:['200to500'],type:['electric'],bodyStyle:['none'],pickups:['humbucker','unsure'],genres:['rock','metal','pop','blues']}},
+  {name:"Fender Player Stratocaster",brand:"Fender",emoji:"🎸",price:"$849",priceN:849,rating:4.7,reviews:4200,specs:["Alder body","3x Alnico V single coil","Modern C neck","22 frets"],affiliate:"https://www.sweetwater.com/store/detail/Stratocaster/",productImg:"https://fmedia.fender.com/products/014-4502-500/0144502500_gtr_frt_001_rr.jpg",bands:"Red Hot Chili Peppers · Nirvana · Radiohead",bestFor:{skill:['intermediate','advanced'],budget:['500to1000'],type:['electric'],bodyStyle:['strat'],pickups:['single','unsure'],genres:['rock','blues','indie','pop','country']}},
+  {name:"Fender Player Telecaster",brand:"Fender",emoji:"📻",price:"$849",priceN:849,rating:4.7,reviews:3100,specs:["Alder body","2x Alnico V single coil","Maple neck","22 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=fender+player+telecaster",productImg:"https://fmedia.fender.com/products/014-5212-306/0145212306_gtr_frt_001_rr.jpg",bands:"Rolling Stones · Eagles · Blink-182",bestFor:{skill:['intermediate','advanced'],budget:['500to1000'],type:['electric'],bodyStyle:['tele'],pickups:['single','unsure'],genres:['country','rock','blues','indie']}},
+  {name:"PRS SE Custom 24",brand:"PRS",emoji:"🎸",price:"$849",priceN:849,rating:4.8,reviews:1600,specs:["Mahogany body","85/15 S pickups","Maple top","24 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=prs+se+custom+24",productImg:"https://prsguitars.com/assets/images/guitars/SE_Custom_24_2022_Blue_Mateo_Front.jpg",bands:"Alter Bridge · Santana · Creed",bestFor:{skill:['intermediate','advanced'],budget:['500to1000'],type:['electric'],bodyStyle:['none'],pickups:['humbucker','unsure'],genres:['rock','metal','pop','blues']}},
+  {name:"Schecter Hellraiser C-1",brand:"Schecter",emoji:"💀",price:"$849",priceN:849,rating:4.7,reviews:980,specs:["Mahogany body","EMG 81/89","Rosewood board","24 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=schecter+hellraiser+c1",productImg:"https://schecter.com/cdn/shop/products/SHR-C-1-FR-S-BLK-CHR.jpg?width=800",bands:"Avenged Sevenfold · Slipknot · Killswitch Engage",bestFor:{skill:['intermediate','advanced'],budget:['500to1000'],type:['electric'],bodyStyle:['modern','flyingv'],pickups:['humbucker'],genres:['metal','rock','punk']}},
+  {name:"Ibanez RG450DX",brand:"Ibanez",emoji:"⚡",price:"$499",priceN:499,rating:4.5,reviews:1100,specs:["Basswood body","Quantum HH","Wizard III neck","24 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=ibanez+rg450dx",productImg:"https://ibanez.com/media/catalog/product/I/I/IIARG450DXWNSF-1-01_1.jpg",bands:"Iron Maiden · Megadeth · Pantera",bestFor:{skill:['intermediate'],budget:['200to500'],type:['electric'],bodyStyle:['modern','flyingv'],pickups:['humbucker'],genres:['metal','rock','punk']}},
+  {name:"ESP LTD EC-1000",brand:"ESP LTD",emoji:"💀",price:"$999",priceN:999,rating:4.7,reviews:1300,specs:["Mahogany body","EMG 81/60","Set-thru neck","24 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=esp+ltd+ec-1000",productImg:"https://espguitars.com/cdn/shop/products/EC-1000-VBHB-01.jpg?width=800",bands:"Metallica · Slayer · Pantera",bestFor:{skill:['intermediate','advanced'],budget:['500to1000'],type:['electric'],bodyStyle:['lespaul','modern','flyingv'],pickups:['humbucker'],genres:['metal','rock']}},
+  {name:"Ibanez AS93FM",brand:"Ibanez",emoji:"🎺",price:"$649",priceN:649,rating:4.5,reviews:770,specs:["Semi-hollow","Super 58 pickups","Bound arched top","20 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=ibanez+as93fm",productImg:"https://ibanez.com/media/catalog/product/A/S/AS93FM-TBC-01.jpg",bands:"The Beatles · Radiohead · Blur",bestFor:{skill:['intermediate','advanced'],budget:['500to1000'],type:['electric'],bodyStyle:['hollow'],pickups:['humbucker','unsure'],genres:['jazz','blues','rock','indie']}},
+  {name:"Fender Player Jazzmaster",brand:"Fender",emoji:"🎸",price:"$849",priceN:849,rating:4.5,reviews:860,specs:["Alder body","Alnico V pickups","9.5 inch radius","22 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=fender+player+jazzmaster",productImg:"https://fmedia.fender.com/products/014-3900-534/0143900534_gtr_frt_001_rr.jpg",bands:"Radiohead · Sonic Youth · My Bloody Valentine",bestFor:{skill:['intermediate','advanced'],budget:['500to1000'],type:['electric'],bodyStyle:['none'],pickups:['single','unsure'],genres:['indie','rock','jazz']}},
+  {name:"Gibson Les Paul Standard 50s",brand:"Gibson",emoji:"🎵",price:"$2,499",priceN:2499,rating:4.9,reviews:2800,specs:["Mahogany body","Burstbucker 1 and 2","Rosewood board","22 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=gibson+les+paul+standard+50s",productImg:"https://assets.gibson.com/product/photos/LPS50P00NHNH1/LPS50P00NHNH1-Hero.jpg",bands:"Guns N Roses · Led Zeppelin · AC/DC",bestFor:{skill:['advanced'],budget:['over1000'],type:['electric'],bodyStyle:['lespaul'],pickups:['humbucker','unsure'],genres:['rock','blues','jazz','metal']}},
+  {name:"Fender American Professional II Stratocaster",brand:"Fender",emoji:"🎸",price:"$1,649",priceN:1649,rating:4.9,reviews:1900,specs:["Alder body","V-Mod II single coils","Deep C neck","22 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=fender+american+professional+ii+stratocaster",productImg:"https://fmedia.fender.com/products/011-3900-700/0113900700_gtr_frt_001_rr.jpg",bands:"Red Hot Chili Peppers · Radiohead · The Strokes",bestFor:{skill:['advanced'],budget:['over1000'],type:['electric'],bodyStyle:['strat'],pickups:['single'],genres:['rock','blues','indie','country','pop']}},
+  {name:"Gibson SG Standard",brand:"Gibson",emoji:"⚡",price:"$1,699",priceN:1699,rating:4.8,reviews:1400,specs:["Mahogany body","490R/498T HBs","Rosewood board","22 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=gibson+sg+standard",productImg:"https://assets.gibson.com/product/photos/SGSTOOCHNH1/SGSTOOCHNH1-Hero.jpg",bands:"AC/DC · Black Sabbath · Muse",bestFor:{skill:['advanced','intermediate'],budget:['over1000'],type:['electric'],bodyStyle:['none'],pickups:['humbucker'],genres:['rock','metal','blues']}},
+  {name:"PRS Custom 24",brand:"PRS",emoji:"🎸",price:"$4,149",priceN:4149,rating:4.9,reviews:1100,specs:["Mahogany body","85/15 pickups","Maple top","24 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=prs+custom+24",productImg:"https://prsguitars.com/assets/images/guitars/Custom_24_10_Top_McCarty_Tobacco_Front.jpg",bands:"Alter Bridge · Santana · Creed",bestFor:{skill:['advanced'],budget:['over1000'],type:['electric'],bodyStyle:['none'],pickups:['humbucker','unsure'],genres:['rock','metal','pop','jazz','blues']}},
+  {name:"Fender American Professional II Telecaster",brand:"Fender",emoji:"📻",price:"$1,649",priceN:1649,rating:4.8,reviews:1200,specs:["Alder body","V-Mod II single coils","Maple neck","22 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=fender+american+professional+ii+telecaster",productImg:"https://fmedia.fender.com/products/011-3940-700/0113940700_gtr_frt_001_rr.jpg",bands:"Rolling Stones · Eagles · The Clash",bestFor:{skill:['advanced'],budget:['over1000'],type:['electric'],bodyStyle:['tele'],pickups:['single'],genres:['country','rock','blues','indie']}},
+  {name:"Gibson ES-335",brand:"Gibson",emoji:"🎺",price:"$3,799",priceN:3799,rating:4.9,reviews:890,specs:["Semi-hollow","Burstbucker 53/54","Rosewood board","22 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=gibson+es-335",productImg:"https://assets.gibson.com/product/photos/ES35P00OVNH1/ES35P00OVNH1-Hero.jpg",bands:"The Beatles · Foo Fighters · Oasis",bestFor:{skill:['advanced'],budget:['over1000'],type:['electric'],bodyStyle:['hollow'],pickups:['humbucker'],genres:['jazz','blues','rock','indie']}},
+  {name:"Yamaha F310",brand:"Yamaha",emoji:"🎵",price:"$149",priceN:149,rating:4.2,reviews:3800,specs:["Spruce top","Meranti back/sides","Rosewood board","20 frets"],affiliate:"https://www.amazon.com/s?k=yamaha+f310+acoustic+guitar",productImg:"https://usa.yamaha.com/files/download/image/3/14552/1136065/f310-natural-1.jpg",bands:"Oasis · U2 · The Beatles",bestFor:{skill:['beginner'],budget:['under200'],type:['acoustic','unsure'],bodyStyle:['none'],pickups:['unsure'],genres:['pop','folk','country','worship','indie']}},
+  {name:"Fender CD-60S",brand:"Fender",emoji:"🎵",price:"$239",priceN:239,rating:4.4,reviews:2600,specs:["Solid spruce top","Mahogany back/sides","Rolled fretboard edges","20 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=fender+cd-60s",productImg:"https://fmedia.fender.com/products/096-1160-021/9611600221_gtr_frt_001_rr.jpg",bands:"Eagles · Fleetwood Mac · Coldplay",bestFor:{skill:['beginner'],budget:['under200','200to500'],type:['acoustic','unsure'],bodyStyle:['none'],pickups:['unsure'],genres:['folk','pop','country','worship','indie']}},
+  
+  {name:"Seagull S6 Original",brand:"Seagull",emoji:"🎵",price:"$499",priceN:499,rating:4.7,reviews:1900,specs:["Solid cedar top","Wild cherry sides","Wide nut","21 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=seagull+s6+original",productImg:"https://www.seagullguitars.com/images/products/large/039588_product1.jpg",bands:"Crosby Stills and Nash · Eagles · Fleetwood Mac",bestFor:{skill:['beginner','intermediate'],budget:['200to500'],type:['acoustic','unsure'],bodyStyle:['none'],pickups:['unsure'],genres:['folk','indie','country','worship','pop']}},
+  {name:"Taylor Academy 12",brand:"Taylor",emoji:"🎵",price:"$499",priceN:499,rating:4.7,reviews:1400,specs:["Sitka spruce top","Layered walnut","Ideal neck join","20 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=taylor+academy+12",productImg:"https://www.taylorguitars.com/sites/default/files/styles/800x1200/public/Academy12-1-800x1200.jpg",bands:"Eagles · Fleetwood Mac · Coldplay",bestFor:{skill:['beginner','intermediate'],budget:['200to500'],type:['acoustic','unsure'],bodyStyle:['none'],pickups:['unsure'],genres:['folk','pop','indie','country','worship']}},
+  {name:"Martin 000-15M",brand:"Martin",emoji:"🎵",price:"$799",priceN:799,rating:4.7,reviews:1300,specs:["Mahogany top","Satin finish","High-altitude bracing","20 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=martin+000-15m",productImg:"https://cf.martinguitar.com/is/image/martin/10000-15M?hei=800&wid=600&resMode=sharp2&fmt=jpg",bands:"Rolling Stones · Eagles · Fleetwood Mac",bestFor:{skill:['intermediate','advanced'],budget:['500to1000'],type:['acoustic'],bodyStyle:['none'],pickups:['unsure'],genres:['blues','folk','country','indie']}},
+  {name:"Martin D-28",brand:"Martin",emoji:"🎵",price:"$3,099",priceN:3099,rating:4.9,reviews:2100,specs:["Sitka spruce top","East Indian rosewood","Scalloped X-brace","20 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=martin+d-28",productImg:"https://cf.martinguitar.com/is/image/martin/10D28?hei=800&wid=600&resMode=sharp2&fmt=jpg",bands:"The Beatles · Eagles · Creedence Clearwater Revival",bestFor:{skill:['advanced'],budget:['over1000'],type:['acoustic'],bodyStyle:['none'],pickups:['unsure'],genres:['folk','country','blues','worship']}},
+  {name:"Gibson J-45 Standard",brand:"Gibson",emoji:"🎵",price:"$2,299",priceN:2299,rating:4.8,reviews:1100,specs:["Sitka spruce top","Mahogany back/sides","LR Baggs VTC","19 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=gibson+j-45+standard",productImg:"https://assets.gibson.com/product/photos/J45STVSNH1/J45STVSNH1-Hero.jpg",bands:"The Beatles · Crosby Stills and Nash · Eagles",bestFor:{skill:['advanced'],budget:['over1000'],type:['acoustic'],bodyStyle:['none'],pickups:['unsure'],genres:['folk','country','blues','pop','indie']}},
+  {name:"Taylor 814ce",brand:"Taylor",emoji:"🎵",price:"$3,299",priceN:3299,rating:4.9,reviews:980,specs:["Sitka spruce top","Indian rosewood","V-Class bracing","20 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=taylor+814ce",productImg:"https://www.taylorguitars.com/sites/default/files/styles/800x1200/public/814ce-1-800x1200.jpg",bands:"Eagles · Fleetwood Mac · Coldplay",bestFor:{skill:['advanced'],budget:['over1000'],type:['acoustic','acoustic-electric'],bodyStyle:['none'],pickups:['unsure'],genres:['folk','country','pop','worship','blues']}},
+  {name:"Fender Newporter Player",brand:"Fender",emoji:"🔌",price:"$449",priceN:449,rating:4.4,reviews:980,specs:["Spruce top","Mahogany back/sides","Fishman preamp","20 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=fender+newporter+player",productImg:"https://fmedia.fender.com/products/097-0743-222/9707432222_gtr_frt_001_rr.jpg",bands:"Mumford and Sons · Coldplay · Oasis",bestFor:{skill:['beginner','intermediate'],budget:['200to500'],type:['acoustic-electric','unsure'],bodyStyle:['none'],pickups:['unsure'],genres:['pop','indie','folk','worship','country']}},
+  {name:"Taylor 214ce",brand:"Taylor",emoji:"🔌",price:"$1,199",priceN:1199,rating:4.8,reviews:2200,specs:["Sitka spruce top","Layered rosewood","ES-B electronics","20 frets"],affiliate:"https://www.sweetwater.com/store/detail/214ce/",productImg:"https://www.taylorguitars.com/sites/default/files/styles/800x1200/public/214ce-1-800x1200.jpg",bands:"Eagles · Fleetwood Mac · Coldplay",bestFor:{skill:['intermediate','advanced'],budget:['over1000','500to1000'],type:['acoustic-electric','unsure'],bodyStyle:['none'],pickups:['unsure'],genres:['worship','pop','folk','country','indie']}},
+  {name:"Yamaha A-Series A3M",brand:"Yamaha",emoji:"🔌",price:"$799",priceN:799,rating:4.6,reviews:660,specs:["Solid spruce top","Solid mahogany","SRT Zero preamp","20 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=yamaha+a3m",productImg:"https://usa.yamaha.com/files/download/image/3/14553/1136065/A3M_NT_MH.jpg",bands:"Coldplay · Counting Crows · Fleetwood Mac",bestFor:{skill:['intermediate','advanced'],budget:['500to1000'],type:['acoustic-electric'],bodyStyle:['none'],pickups:['unsure'],genres:['pop','worship','folk','country','indie']}},
+  {name:"Martin LX1 Little Martin",brand:"Martin",emoji:"✈️",price:"$199",priceN:199,rating:4.1,reviews:2200,specs:["HPL body","15 inch scale","Gig bag included","18 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=martin+lx1",productImg:"https://cf.martinguitar.com/is/image/martin/10LX1?hei=800&wid=600&resMode=sharp2&fmt=jpg",bands:"Oasis · Mumford and Sons · Coldplay",bestFor:{skill:['beginner','intermediate'],budget:['under200','200to500'],type:['acoustic','unsure'],bodyStyle:['none'],pickups:['unsure'],genres:['folk','pop','country','worship']}},
+  {name:"Taylor GS Mini Mahogany",brand:"Taylor",emoji:"✈️",price:"$499",priceN:499,rating:4.6,reviews:1800,specs:["Layered Sapele top","Mini jumbo body","23.5 inch scale","18 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=taylor+gs+mini+mahogany",productImg:"https://www.taylorguitars.com/sites/default/files/styles/800x1200/public/GS-Mini-Mahogany-1-800x1200.jpg",bands:"Mumford and Sons · Coldplay · The Lumineers",bestFor:{skill:['beginner','intermediate','advanced'],budget:['200to500'],type:['acoustic','unsure'],bodyStyle:['none'],pickups:['unsure'],genres:['folk','pop','country','worship','indie']}},
+  {name:"Schecter Omen-6",brand:"Schecter",emoji:"💀",price:"$449",priceN:449,rating:4.3,reviews:870,specs:["Basswood body","Diamond Plus HBs","Rosewood board","24 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=schecter+omen-6",productImg:"https://schecter.com/cdn/shop/products/SCH-OMEN-6-BLK.jpg?width=800",bands:"Avenged Sevenfold · Slipknot · Korn",bestFor:{skill:['beginner','intermediate'],budget:['200to500'],type:['electric'],bodyStyle:['modern','flyingv'],pickups:['humbucker'],genres:['metal','rock','punk']}},
+  {name:"Epiphone SG Standard",brand:"Epiphone",emoji:"⚡",price:"$449",priceN:449,rating:4.4,reviews:1300,specs:["Mahogany body","Alnico Classic Pro HBs","Rosewood board","22 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=epiphone+sg+standard",productImg:"https://assets.epiphone.com/Products/Guitars/Solidbody/SG/2021/SG-Standard/EpiSGStdEbonyR_1.jpg",bands:"AC/DC · Black Sabbath · Muse",bestFor:{skill:['beginner','intermediate'],budget:['200to500'],type:['electric'],bodyStyle:['none'],pickups:['humbucker'],genres:['rock','metal','blues']}},
+  {name:"Charvel Pro-Mod DK24 HH",brand:"Charvel",emoji:"⚡",price:"$999",priceN:999,rating:4.6,reviews:640,specs:["Basswood body","Seymour Duncan HH","Graphite neck","24 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=charvel+pro-mod+dk24",productImg:"https://fmedia.fender.com/products/291-7002-503/2917002503_gtr_frt_001_rr.jpg",bands:"Van Halen · Extreme · Dream Theater",bestFor:{skill:['intermediate','advanced'],budget:['500to1000'],type:['electric'],bodyStyle:['modern'],pickups:['humbucker'],genres:['metal','rock']}},
+  {name:"Fender Vintera 50s Stratocaster",brand:"Fender",emoji:"🎸",price:"$1,199",priceN:1199,rating:4.8,reviews:920,specs:["Alder body","Vintage single coils","Maple neck","21 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=fender+vintera+50s+stratocaster",productImg:"https://fmedia.fender.com/products/014-9002-500/0149002500_gtr_frt_001_rr.jpg",bands:"The Beatles · Buddy Holly · Creedence Clearwater Revival",bestFor:{skill:['intermediate','advanced'],budget:['over1000','500to1000'],type:['electric'],bodyStyle:['strat'],pickups:['single'],genres:['rock','blues','indie','country','pop']}},
+  {name:"Fender Vintera 60s Telecaster",brand:"Fender",emoji:"📻",price:"$1,199",priceN:1199,rating:4.7,reviews:780,specs:["Alder body","Vintage single coils","Maple neck","21 frets"],affiliate:"https://www.sweetwater.com/store/search/?s=fender+vintera+60s+telecaster",productImg:"https://fmedia.fender.com/products/014-9022-305/0149022305_gtr_frt_001_rr.jpg",bands:"Rolling Stones · The Clash · Eagles",bestFor:{skill:['intermediate','advanced'],budget:['over1000','500to1000'],type:['electric'],bodyStyle:['tele'],pickups:['single'],genres:['country','rock','blues','indie']}},
+];
+
+/* ══════════════════════════════════════════
+   QUIZ DATA
+══════════════════════════════════════════ */
+const Qs=[
+  {id:'skill',text:"What's your skill level?",sub:"Be honest — it helps us match you better.",type:'single',opts:[
+    {v:'beginner',l:'Beginner',ic:'🌱',d:'Just starting out'},
+    {v:'intermediate',l:'Intermediate',ic:'🎸',d:'A year or two in'},
+    {v:'advanced',l:'Advanced',ic:'⚡',d:'Serious player'},
+  ]},
+  {id:'budget',text:"What's your budget?",sub:"We have great options at every price point.",type:'single',opts:[
+    {v:'under200',l:'Under $200',ic:'💰'},
+    {v:'200to500',l:'$200 – $500',ic:'💰💰'},
+    {v:'500to1000',l:'$500 – $1,000',ic:'💰💰💰'},
+    {v:'over1000',l:'$1,000+',ic:'🏆'},
+  ]},
+  {id:'genres',text:"What music do you want to play?",sub:"Pick everything that applies.",type:'multi',opts:[
+    {v:'rock',l:'Rock',ic:'🤘'},{v:'metal',l:'Metal',ic:'💀'},{v:'blues',l:'Blues',ic:'🎷'},
+    {v:'jazz',l:'Jazz',ic:'🎺'},{v:'pop',l:'Pop',ic:'✨'},{v:'country',l:'Country',ic:'🤠'},
+    {v:'indie',l:'Indie',ic:'🌿'},{v:'worship',l:'Worship',ic:'🎼'},{v:'punk',l:'Punk',ic:'💥'},{v:'folk',l:'Folk',ic:'🍂'},
+  ]},
+  {id:'type',text:"Electric, acoustic, or unsure?",sub:"Don't worry — we can help you decide.",type:'single',opts:[
+    {v:'electric',l:'Electric',ic:'⚡'},
+    {v:'acoustic',l:'Acoustic',ic:'🎵'},
+    {v:'acoustic-electric',l:'Acoustic-Electric',ic:'🔌'},
+    {v:'unsure',l:'Not sure yet',ic:'🤔'},
+  ]},
+  {id:'bodyStyle',text:"What shape speaks to you?",sub:"These are real guitar silhouettes — pick the one that calls to you.",type:'visual-body',opts:[
+    {v:'strat',l:'Stratocaster',sub:'Double-cutaway · Two horns',genres:'Rock · Blues · Pop · Country',bands:'Red Hot Chili Peppers · Nirvana · Radiohead'},
+    {v:'tele',l:'Telecaster',sub:'Single-cutaway · Slab body',genres:'Country · Rock · Blues · Indie',bands:'Rolling Stones · Bruce Springsteen · The Clash'},
+    {v:'lespaul',l:'Les Paul',sub:'Single-cutaway · Carved top',genres:'Rock · Metal · Blues · Jazz',bands:'Guns N Roses · Led Zeppelin · AC/DC'},
+    {v:'flyingv',l:'Flying V',sub:'V-shaped · Iconic metal look',genres:'Metal · Hard Rock',bands:'Metallica · Iron Maiden · Black Sabbath'},
+    {v:'hollow',l:'Hollow / Semi-Hollow',sub:'Archtop · Full or semi body',genres:'Jazz · Blues · Indie · Rock',bands:'The Beatles · Foo Fighters · BB King'},
+    {v:'none',l:'No preference',sub:'Show me the best fit for me',genres:'',bands:''},
+  ]},
+  {id:'pickups',text:"What kind of tone do you want?",sub:"Pickups shape your sound more than almost anything else.",type:'visual-pickup',opts:[
+    {v:'single',l:'Single Coil',sub:'Bright, clear & snappy',tone:'Think Fender Strat or Tele. Crisp highs, bell-like clarity, great note separation. Can have a slight hum at high volume.',genres:'Country · Blues · Indie · Pop · Rock · Funk',artists:'Jimi Hendrix · John Mayer · David Gilmour'},
+    {v:'humbucker',l:'Humbucker',sub:'Thick, warm & powerful',tone:'Think Gibson Les Paul or SG. Two coils cancel noise and deliver a fat, full sound. Great for crunch and sustain.',genres:'Rock · Metal · Jazz · Blues · Worship',artists:'Slash · Jimmy Page · Carlos Santana'},
+    {v:'unsure',l:'Not sure — help me decide',sub:'We will pick for you',tone:'No worries. Based on your genre and skill level we will automatically pick the best pickup type for you.',genres:'',artists:''},
+  ]},
+  {id:'use',text:"How will you mainly use it?",sub:"Your use case shapes the recommendation.",type:'single',opts:[
+    {v:'home',l:'Practicing at home',ic:'🏠'},
+    {v:'recording',l:'Recording',ic:'🎙️'},
+    {v:'gigging',l:'Playing live',ic:'🎤'},
+    {v:'collecting',l:'Collecting',ic:'🏆'},
+    {v:'travel',l:'Travel guitar',ic:'✈️'},
+  ]},
+  {id:'aesthetic',text:"What's your vibe?",sub:"Your guitar should look as good as it sounds.",type:'single',opts:[
+    {v:'vintage',l:'Classic & Vintage',ic:'🕰️'},
+    {v:'modern',l:'Modern & Sleek',ic:'◻️'},
+    {v:'aggressive',l:'Aggressive / Metal',ic:'💀'},
+    {v:'minimalist',l:'Minimal & Clean',ic:'○'},
+  ]},
+];
+
+/* ══════════════════════════════════════════
+   STATE
+══════════════════════════════════════════ */
+var curQ = 0;
+var qAns = {};
+var qfAns = {};
+
+/* ══════════════════════════════════════════
+   SVG GUITAR BODY SHAPES  (clean solid silhouettes)
+   Traced from reference poster — solid black fills
+══════════════════════════════════════════ */
+
+/* FENDER STRATOCASTER — from uploaded SVG 303510.svg */
+function svgStrat() {
+  return '<svg viewBox="0 0 640 1280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">'
+    + '<g transform="translate(0,1280) scale(0.1,-0.1)" fill="#1a1610" stroke="none">'
+    + '<path d="M3562 12782 c-29 -11 -70 -33 -90 -49 -34 -27 -94 -105 -104 -134 -3 -8 -16 -10 -41 -5 -22 4 -34 11 -32 19 8 22 -23 49 -66 58 -68 16 -95 -13 -114 -123 -5 -34 -3 -38 27 -54 61 -31 87 -35 106 -13 17 19 38 24 65 14 21 -9 -33 -200 -56 -199 -50 2 -57 5 -57 22 0 32 -37 56 -87 56 -59 1 -84 -29 -91 -109 l-4 -55 43 -20 c55 -25 68 -25 94 0 18 17 26 19 53 9 l31 -10 -32 -92 c-31 -89 -33 -92 -64 -95 -27 -3 -33 0 -33 16 0 32 -36 56 -87 56 -59 1 -84 -29 -91 -109 l-4 -55 43 -20 c56 -25 74 -25 93 1 11 17 20 20 46 14 24 -5 30 -11 25 -25 -33 -106 -62 -181 -68 -181 -4 1 -19 1 -33 1 -14 0 -22 4 -19 10 20 32 -65 80 -118 66 -29 -7 -52 -51 -61 -119 l-7 -47 43 -20 c55 -25 85 -25 98 0 12 23 29 25 53 8 14 -12 13 -21 -14 -106 -24 -73 -34 -92 -46 -88 -8 3 -21 6 -29 6 -7 0 -11 6 -8 13 13 35 -88 83 -125 60 -25 -16 -48 -64 -56 -116 l-6 -47 43 -20 c52 -24 81 -25 98 -5 12 15 51 21 62 10 5 -5 -45 -192 -54 -200 -1 -2 -15 -1 -30 2 -19 4 -28 12 -28 24 0 41 -103 74 -135 43 -26 -26 -45 -78 -45 -123 0 -38 1 -39 56 -62 l57 -23 18 22 c18 23 44 28 67 14 10 -7 7 -26 -12 -93 -51 -179 -48 -193 62 -277 l77 -59 -3 -459 c-3 -474 -14 -1143 -32 -1934 -18 -778 -40 -1700 -50 -2055 -5 -187 -12 -459 -16 -605 l-7 -265 -28 -42 c-114 -166 -324 -188 -541 -57 -80 48 -196 165 -226 226 -29 59 -58 227 -72 416 -12 154 -22 205 -48 235 -15 16 -14 17 2 11 14 -5 16 -2 10 19 -5 22 -2 29 20 38 37 17 34 52 -7 83 -19 15 -41 26 -49 26 -22 0 -41 -27 -34 -45 4 -11 -4 -22 -23 -33 -24 -13 -26 -18 -15 -27 10 -7 -2 -10 -44 -11 -45 0 -69 -6 -104 -27 -108 -63 -218 -235 -265 -415 -19 -75 -26 -131 -30 -249 -10 -273 24 -477 147 -898 45 -154 96 -325 112 -380 87 -298 91 -595 11 -850 -30 -95 -75 -208 -173 -440 -308 -722 -389 -1043 -377 -1485 4 -145 9 -192 30 -272 48 -184 126 -308 295 -470 204 -195 438 -319 717 -382 169 -38 537 -82 773 -92 138 -6 154 -9 167 -27 13 -18 13 -23 0 -37 -33 -36 -3 -70 60 -70 35 0 47 5 56 21 9 17 8 25 -4 37 -14 13 -14 18 -1 44 l15 28 332 0 c349 0 496 11 685 50 341 71 611 237 796 490 125 170 184 355 206 646 23 297 -26 592 -153 924 -51 131 -222 521 -302 685 -91 187 -125 324 -125 500 0 167 44 343 125 505 63 126 164 470 186 636 23 176 -13 402 -89 550 -24 48 -91 110 -138 130 -79 33 -183 3 -234 -67 -18 -25 -34 -68 -45 -117 -52 -242 -101 -370 -168 -439 -95 -97 -236 -153 -392 -153 -138 0 -245 35 -316 102 l-36 34 -6 1264 c-18 3450 -20 4714 -7 4790 21 128 87 216 236 314 l79 51 3 70 c4 80 -14 185 -93 545 -29 135 -57 261 -61 280 -11 54 -5 129 12 154 8 13 41 38 73 55 137 73 204 220 176 384 -24 140 -64 194 -183 250 -82 38 -166 45 -240 19z"/>'
+    + '</g></svg>';
+}
+
+/* GIBSON LES PAUL — from uploaded SVG 161846.svg */
+function svgLesPaul() {
+  return '<svg viewBox="0 0 640 1280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">'
+    + '<g transform="translate(0,1280) scale(0.1,-0.1)" fill="#1a1610" stroke="none">'
+    + '<path d="M2866 12781 c-25 -27 -33 -64 -45 -207 -6 -71 -19 -186 -28 -256 -17 -136 -17 -136 -70 -122 -16 4 -23 14 -23 30 0 30 -14 37 -54 30 -103 -20 -138 -171 -55 -240 37 -32 61 -33 98 -5 19 14 36 19 50 14 19 -6 20 -11 14 -103 -7 -119 -14 -134 -56 -130 -24 2 -33 9 -37 28 -6 22 -11 25 -50 24 -36 -1 -49 -7 -77 -37 -29 -32 -33 -44 -33 -89 0 -66 27 -114 76 -134 34 -14 38 -14 58 5 13 13 36 21 55 21 l33 0 -6 -67 c-13 -140 -15 -143 -47 -143 -19 0 -34 8 -45 25 -23 35 -81 35 -123 -1 -81 -68 -52 -222 45 -240 30 -5 40 -2 63 20 31 29 59 34 68 10 3 -8 1 -57 -4 -107 -15 -148 1 -181 114 -241 104 -55 119 -126 103 -481 -5 -126 -14 -520 -20 -875 -5 -355 -14 -942 -20 -1305 -6 -363 -15 -889 -20 -1170 -5 -280 -12 -681 -15 -890 -3 -209 -8 -439 -11 -512 l-6 -132 -37 18 c-70 35 -167 63 -241 69 -66 5 -78 9 -107 37 -30 29 -31 33 -18 51 8 10 15 29 15 42 0 19 -5 22 -40 22 -21 0 -62 -5 -90 -11 -41 -9 -50 -15 -50 -32 0 -11 7 -28 15 -37 11 -13 14 -28 9 -58 -6 -38 -10 -41 -68 -66 -158 -67 -297 -191 -364 -324 -60 -121 -76 -206 -69 -371 11 -251 58 -443 167 -681 88 -191 102 -240 107 -370 5 -98 2 -128 -16 -195 -44 -159 -142 -306 -322 -480 -141 -137 -209 -213 -276 -311 -206 -302 -302 -659 -273 -1021 26 -328 112 -593 270 -830 221 -332 527 -548 967 -684 174 -53 513 -109 664 -109 71 0 80 -11 82 -92 l2 -63 93 -3 c88 -3 92 -2 92 18 0 12 -7 34 -15 50 -10 19 -11 31 -4 35 5 4 14 17 19 29 8 21 16 23 132 29 562 30 1015 212 1338 538 492 496 622 1288 315 1923 -90 187 -222 361 -496 653 -187 197 -237 297 -246 488 -6 121 12 209 78 361 73 171 149 385 175 489 43 180 31 354 -36 490 -27 55 -97 153 -110 155 -3 0 -13 -33 -23 -72 -39 -168 -137 -296 -274 -361 -60 -28 -80 -32 -173 -35 -88 -3 -115 0 -170 18 -67 22 -164 86 -211 136 l-27 29 -6 615 c-4 338 -11 741 -16 895 -5 154 -14 647 -20 1095 -9 741 -20 1294 -35 1770 -10 299 -24 1354 -18 1382 7 35 52 80 117 117 30 16 64 42 76 58 21 27 22 33 16 161 l-7 132 25 0 c13 0 31 3 40 6 12 4 16 0 16 -15 0 -49 70 -36 107 18 41 60 24 170 -30 206 -14 9 -41 19 -61 22 -34 5 -36 4 -36 -21 0 -24 -4 -26 -39 -26 l-39 0 -6 68 c-4 37 -9 83 -11 103 -4 32 -2 38 18 43 46 12 57 8 57 -24 0 -27 3 -30 31 -30 41 0 99 56 100 97 4 115 -35 174 -119 177 -33 1 -37 -1 -34 -21 3 -21 -1 -23 -36 -23 l-40 0 -6 68 c-4 37 -9 92 -12 123 l-6 56 34 5 c36 6 48 -4 48 -39 0 -54 92 -13 122 53 26 60 17 114 -26 162 -28 29 -40 35 -77 36 -41 1 -44 -1 -44 -24 0 -22 -4 -25 -35 -25 -35 0 -35 0 -42 55 -3 30 -14 140 -22 243 -21 240 -29 281 -62 296 -37 16 -50 14 -72 -14 -34 -43 -60 -46 -122 -14 -47 24 -64 27 -117 24 -46 -3 -73 -11 -100 -30 -54 -36 -94 -33 -142 10 -44 40 -61 43 -85 16z m1372 -10847 c26 -31 32 -46 32 -85 0 -40 -4 -51 -30 -72 -55 -46 -102 -44 -158 6 -56 52 -45 153 20 182 51 23 97 12 136 -31z m47 -537 c21 -16 15 -61 -11 -71 -42 -16 -76 50 -36 73 22 14 25 13 47 -2z"/>'
+    + '</g></svg>';
+}
+
+/* GIBSON FLYING V — from uploaded SVG 146325.svg */
+function svgFlyingV() {
+  return '<svg viewBox="0 0 640 1280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">'
+    + '<g transform="translate(0,1280) scale(0.1,-0.1)" fill="#1a1610" stroke="none">'
+    + '<path d="M2977 12786 c-75 -27 -76 -29 -143 -271 -84 -310 -99 -358 -112 -363 -7 -2 -12 6 -12 20 0 21 -9 26 -91 47 -87 23 -93 23 -105 7 -31 -43 -28 -151 4 -160 9 -2 52 -7 95 -11 66 -6 77 -5 77 9 0 9 5 16 10 16 6 0 10 -4 10 -10 0 -13 -59 -222 -64 -227 -11 -11 -56 11 -56 27 0 10 -8 21 -17 24 -44 13 -168 46 -174 46 -13 0 -30 -78 -27 -125 l3 -50 89 -9 c67 -7 91 -6 94 2 3 10 73 19 72 10 -1 -2 -18 -64 -39 -138 -32 -114 -41 -135 -59 -138 -15 -2 -21 3 -24 19 -2 19 -17 26 -93 46 -84 23 -90 24 -102 7 -16 -22 -27 -95 -18 -132 6 -29 6 -30 98 -37 63 -5 93 -3 95 4 2 6 13 11 24 11 16 0 18 -4 12 -22 -4 -13 -19 -69 -35 -126 l-28 -102 22 -14 c99 -60 132 -84 186 -141 97 -101 112 -143 118 -347 3 -92 0 -438 -6 -770 -14 -754 -19 -1033 -31 -1773 -5 -324 -12 -709 -15 -855 -2 -146 -7 -422 -11 -615 -12 -686 -6 -607 -52 -717 -22 -53 -54 -116 -70 -140 -30 -43 -94 -107 -125 -124 -15 -9 -51 -117 -405 -1224 -72 -223 -226 -702 -342 -1065 -116 -363 -269 -840 -340 -1060 -71 -220 -224 -697 -340 -1060 -117 -363 -227 -709 -246 -768 -54 -173 -45 -267 36 -348 72 -72 185 -89 284 -42 31 14 208 219 846 978 444 528 830 981 859 1007 64 58 156 104 234 119 123 22 248 -30 364 -151 40 -41 450 -508 912 -1037 652 -747 850 -967 883 -985 64 -33 165 -32 234 4 65 34 128 105 154 174 23 64 26 161 6 214 -30 77 -639 1766 -946 2625 -37 105 -244 680 -460 1280 -215 600 -410 1143 -433 1209 -39 109 -45 121 -84 147 -58 40 -126 121 -162 193 -17 34 -60 141 -95 238 l-65 177 -5 233 c-3 128 -8 420 -11 648 -3 228 -8 566 -10 750 -19 1179 -26 1725 -31 2255 -5 582 -4 602 15 666 40 127 137 242 263 309 32 17 58 34 58 38 0 4 -14 52 -30 106 -17 55 -30 103 -30 108 0 12 38 10 42 -3 3 -8 30 -9 93 -3 l90 9 3 50 c2 28 -2 67 -8 89 -13 44 -14 44 -141 6 -51 -15 -66 -24 -65 -38 0 -10 -7 -18 -21 -20 -19 -3 -25 8 -57 110 -52 169 -52 168 -27 168 12 0 21 -5 21 -11 0 -15 182 -2 192 14 17 27 0 148 -22 162 -8 5 -65 -8 -157 -37 -21 -6 -33 -16 -33 -28 0 -24 -38 -33 -49 -12 -4 10 -21 59 -36 110 -24 79 -26 95 -14 103 9 6 18 4 26 -7 9 -12 23 -14 70 -9 131 14 123 9 123 69 0 66 -17 116 -38 116 -10 0 -53 -11 -97 -23 -67 -19 -81 -26 -83 -45 -2 -14 -10 -22 -22 -22 -20 0 -21 3 -141 398 -29 96 -62 185 -72 199 -40 50 -115 65 -190 39z"/>'
+    + '</g></svg>';
+}
+
+/* FENDER TELECASTER — from uploaded SVG Telecaster_.svg */
+function svgTele() {
+  return '<svg viewBox="0 0 640 1280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">'
+    + '<g transform="rotate(-90,640,640) translate(0,640) scale(0.1,-0.1)" fill="#1a1610" stroke="none">'
+    + '<path d="M1275 5309 c-300 -38 -580 -199 -796 -458 -98 -117 -140 -190 -190 -331 -85 -241 -132 -576 -146 -1027 -5 -179 -9 -220 -20 -216 -7 3 -13 -1 -13 -10 0 -31 -20 -27 -53 9 -20 22 -39 34 -45 30 -15 -9 -16 -185 -2 -206 9 -13 16 -9 44 23 38 42 51 46 59 16 3 -12 10 -18 15 -15 5 3 11 -105 15 -262 9 -390 34 -615 92 -849 59 -234 122 -354 264 -505 204 -215 429 -345 701 -404 116 -25 404 -25 540 0 304 56 607 164 1025 366 190 91 414 175 555 206 92 21 310 24 395 5 103 -22 225 -61 375 -121 324 -129 511 -174 735 -174 168 -1 221 9 332 60 142 64 222 171 204 270 -23 122 -84 169 -332 254 -222 76 -370 173 -452 297 -62 95 -82 154 -81 238 1 123 68 215 203 278 66 31 66 31 291 38 124 4 518 10 875 13 358 3 700 8 760 11 61 3 396 7 745 10 349 3 685 7 745 10 61 3 382 8 715 11 333 4 812 10 1065 14 253 4 552 6 665 5 290 -3 349 -16 791 -174 154 -55 233 -71 354 -71 119 0 192 16 294 66 96 47 133 44 228 -18 127 -84 149 -93 243 -93 76 0 91 3 140 30 112 62 170 151 170 263 0 78 -17 121 -64 158 -24 19 -36 37 -36 54 0 24 2 25 49 22 l49 -4 12 52 c11 46 10 53 -6 72 -45 49 -153 80 -207 59 -26 -10 -39 -32 -53 -85 -5 -22 -1 -25 74 -63 2 -1 -2 -11 -8 -23 -7 -13 -18 -19 -28 -16 -176 51 -189 56 -187 79 2 20 6 22 48 19 45 -4 46 -3 57 35 19 62 11 84 -42 116 -80 50 -180 49 -199 -1 -25 -65 -23 -77 15 -97 37 -20 42 -30 27 -53 -7 -11 -28 -8 -108 17 -91 28 -100 33 -100 55 0 24 2 24 48 19 l48 -6 11 43 c6 23 9 53 6 66 -12 48 -142 97 -211 80 -17 -4 -31 -18 -41 -41 -22 -53 -18 -70 21 -91 27 -14 34 -23 29 -39 -4 -11 -8 -21 -9 -23 -2 -2 -36 6 -77 18 -141 41 -136 38 -131 64 4 21 10 24 50 23 l45 -2 15 50 15 50 -36 31 c-40 35 -95 54 -152 54 -49 0 -60 -7 -79 -53 -22 -53 -19 -62 25 -82 44 -20 45 -22 26 -48 -13 -17 -19 -17 -118 14 -98 29 -104 33 -100 55 4 21 9 23 50 21 l45 -2 13 50 c12 47 12 51 -9 74 -35 37 -95 61 -160 61 l-58 0 -20 -46 c-25 -54 -21 -69 25 -90 31 -15 33 -19 24 -40 -12 -26 -9 -26 -129 10 -66 20 -74 25 -77 49 -3 26 -2 27 44 24 l48 -2 13 45 c18 59 5 82 -61 115 -36 18 -66 25 -108 25 -53 0 -59 -2 -71 -27 -8 -16 -17 -40 -21 -55 -5 -24 -1 -30 34 -50 45 -26 45 -26 25 -51 -13 -18 -17 -18 -113 12 -55 17 -120 31 -143 31 -41 0 -48 -4 -114 -74 -38 -41 -80 -79 -93 -85 -22 -12 -841 -16 -972 -6 -30 2 -352 7 -715 10 -636 5 -1000 9 -1750 20 -192 3 -647 7 -1010 10 -890 7 -885 7 -921 77 -29 56 -15 119 59 274 68 144 119 267 131 318 5 20 10 26 15 18 6 -10 11 -9 21 3 15 18 40 20 40 3 0 -7 11 -26 24 -42 22 -29 24 -29 34 -10 16 29 44 186 35 195 -9 9 -73 -28 -73 -42 0 -18 -21 -8 -32 16 -6 13 -15 22 -19 19 -5 -3 -9 30 -9 73 0 160 -51 284 -160 394 -114 115 -247 162 -460 162 -217 0 -430 -50 -739 -174 -254 -102 -324 -120 -507 -126 -270 -10 -363 19 -899 277 -646 311 -1049 416 -1420 369z"/>'
+    + '</g></svg>';
+}
+
+/* HOLLOW BODY — from uploaded SVG Holo_body.svg */
+function svgHollow() {
+  return '<svg viewBox="0 0 1153 1280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">'
+    + '<g transform="translate(0,1280) rotate(-90) translate(0,1153) scale(0.1,-0.1)" fill="#1a1610" stroke="none">'
+    + '<path d="M11623 11520 c-49 -11 -81 -36 -103 -80 -30 -59 -28 -79 15 -143 l39 -58 49 2 c44 3 52 0 70 -25 l21 -29 -45 -39 c-52 -46 -326 -277 -352 -297 -22 -17 -38 -4 -42 32 -3 24 -96 159 -129 186 -14 12 -22 10 -56 -13 -22 -14 -40 -34 -40 -43 0 -26 110 -193 127 -193 15 0 42 -27 43 -42 0 -7 -259 -203 -354 -268 -39 -26 -50 -30 -57 -19 -4 8 -19 29 -33 48 l-25 34 20 38 19 39 -47 65 c-48 64 -48 65 -88 59 -75 -12 -114 -42 -132 -106 -10 -34 -8 -40 30 -97 38 -59 41 -61 82 -61 39 0 47 -4 75 -40 18 -23 31 -42 29 -44 -21 -19 -244 -139 -280 -151 -64 -22 -80 -43 -85 -112 -16 -195 -80 -357 -184 -463 -30 -31 -959 -766 -2065 -1635 -1105 -868 -2034 -1598 -2064 -1622 -33 -27 -57 -40 -61 -33 -4 6 -34 15 -68 20 -274 45 -463 193 -511 400 -30 128 -5 324 60 482 65 159 201 340 304 405 l45 28 0 82 c0 77 -2 84 -30 117 -17 19 -47 40 -67 47 -120 39 -443 -66 -671 -219 -234 -158 -442 -371 -622 -637 -69 -103 -180 -297 -282 -492 -80 -155 -96 -178 -161 -240 -162 -153 -360 -251 -616 -303 -148 -30 -263 -40 -561 -50 -151 -5 -315 -14 -365 -20 -748 -89 -1440 -392 -1857 -813 -302 -305 -487 -681 -543 -1105 -9 -64 -24 -157 -33 -207 -23 -123 -22 -417 2 -575 84 -561 320 -1138 655 -1605 122 -170 225 -290 395 -460 188 -188 339 -317 578 -496 87 -65 186 -142 221 -171 272 -227 734 -427 1207 -523 268 -55 420 -69 750 -69 375 -1 613 22 875 84 616 146 1004 469 1215 1011 121 312 170 652 170 1204 1 423 23 723 66 865 36 122 105 220 184 260 33 17 154 58 550 185 417 134 592 275 686 552 10 28 15 83 16 149 0 136 -21 186 -97 224 -50 25 -52 25 -320 25 -268 0 -271 0 -337 26 -189 74 -324 203 -390 374 -20 52 -23 77 -23 190 1 191 11 211 173 363 70 65 881 813 1802 1662 921 848 1695 1561 1720 1584 306 284 472 434 509 457 24 16 74 39 110 51 61 21 80 23 265 21 l200 -3 114 112 c102 100 115 109 129 95 14 -14 12 -20 -16 -61 l-32 -47 43 -59 c42 -59 43 -60 83 -54 63 9 140 48 168 86 43 56 43 85 -1 148 -37 54 -39 55 -81 52 -24 -1 -51 -7 -61 -12 -13 -7 -22 -5 -31 7 -12 13 -7 21 36 61 83 75 319 262 331 262 24 0 23 -34 -2 -86 l-26 -54 38 -50 c21 -27 45 -50 54 -50 9 0 39 7 67 15 59 18 106 65 122 122 15 52 15 50 -26 110 -38 55 -51 59 -107 31 -17 -9 -35 2 -36 23 0 9 185 131 319 211 83 49 118 65 127 57 9 -8 7 -20 -13 -55 -28 -50 -27 -55 19 -119 33 -46 33 -46 84 -41 75 6 108 27 138 88 14 28 26 58 26 66 0 7 -18 40 -40 72 -32 48 -46 59 -71 62 -27 3 -20 8 62 43 155 67 174 78 172 100 0 11 -9 40 -18 64 -15 41 -15 50 1 121 l16 77 -28 44 c-15 24 -41 61 -58 82 l-30 38 17 47 c43 126 13 224 -86 278 -37 20 -67 27 -116 29 l-66 3 -38 54 c-83 118 -83 118 -138 118 -58 0 -99 16 -153 59 -41 33 -90 41 -117 19 -9 -7 -46 -47 -83 -90 -37 -42 -78 -84 -92 -93 -24 -15 -26 -15 -44 7 -25 30 -24 45 4 92 l24 38 -41 59 c-44 61 -55 66 -124 49z"/>'
+    + '</g></svg>';
+}
+
+/* NO PREFERENCE */
+function svgNone() {
+  return '<svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">'
+    + '<rect x="8"  y="20" width="26" height="90" rx="10" fill="#1a1610" opacity="0.12"/>'
+    + '<rect x="37" y="12" width="26" height="98" rx="10" fill="#1a1610" opacity="0.22"/>'
+    + '<rect x="66" y="20" width="26" height="90" rx="10" fill="#1a1610" opacity="0.12"/>'
+    + '<text x="50" y="76" text-anchor="middle" font-size="30" font-weight="bold" font-family="serif" fill="#1a1610" opacity="0.45">?</text>'
+    + '</svg>';
+}
+
+
+/* ══════════════════════════════════════════
+   SVG PICKUP DIAGRAMS
+══════════════════════════════════════════ */
+function svgSingleCoil() {
+  return '<svg viewBox="0 0 80 52" fill="none" xmlns="http://www.w3.org/2000/svg">'
+    +'<rect x="4" y="10" width="72" height="32" rx="3" fill="rgba(200,146,42,.1)" stroke="rgba(200,146,42,.4)" stroke-width="1.5"/>'
+    +'<rect x="10" y="16" width="60" height="20" rx="2" fill="rgba(200,146,42,.06)" stroke="rgba(200,146,42,.25)" stroke-width="1"/>'
+    +'<circle cx="22" cy="26" r="5" fill="rgba(200,146,42,.3)" stroke="rgba(200,146,42,.6)" stroke-width="1.2"/>'
+    +'<circle cx="40" cy="26" r="5" fill="rgba(200,146,42,.3)" stroke="rgba(200,146,42,.6)" stroke-width="1.2"/>'
+    +'<circle cx="58" cy="26" r="5" fill="rgba(200,146,42,.3)" stroke="rgba(200,146,42,.6)" stroke-width="1.2"/>'
+    +'<circle cx="22" cy="26" r="2" fill="rgba(200,146,42,.7)"/>'
+    +'<circle cx="40" cy="26" r="2" fill="rgba(200,146,42,.7)"/>'
+    +'<circle cx="58" cy="26" r="2" fill="rgba(200,146,42,.7)"/>'
+    +'</svg>';
+}
+function svgHumbucker() {
+  return '<svg viewBox="0 0 80 52" fill="none" xmlns="http://www.w3.org/2000/svg">'
+    +'<rect x="4" y="6" width="34" height="40" rx="3" fill="rgba(200,146,42,.1)" stroke="rgba(200,146,42,.4)" stroke-width="1.5"/>'
+    +'<rect x="42" y="6" width="34" height="40" rx="3" fill="rgba(200,146,42,.1)" stroke="rgba(200,146,42,.4)" stroke-width="1.5"/>'
+    +'<circle cx="21" cy="18" r="5" fill="rgba(200,146,42,.3)" stroke="rgba(200,146,42,.6)" stroke-width="1.2"/>'
+    +'<circle cx="21" cy="34" r="5" fill="rgba(200,146,42,.3)" stroke="rgba(200,146,42,.6)" stroke-width="1.2"/>'
+    +'<circle cx="59" cy="18" r="5" fill="rgba(200,146,42,.3)" stroke="rgba(200,146,42,.6)" stroke-width="1.2"/>'
+    +'<circle cx="59" cy="34" r="5" fill="rgba(200,146,42,.3)" stroke="rgba(200,146,42,.6)" stroke-width="1.2"/>'
+    +'<circle cx="21" cy="18" r="2" fill="rgba(200,146,42,.7)"/>'
+    +'<circle cx="21" cy="34" r="2" fill="rgba(200,146,42,.7)"/>'
+    +'<circle cx="59" cy="18" r="2" fill="rgba(200,146,42,.7)"/>'
+    +'<circle cx="59" cy="34" r="2" fill="rgba(200,146,42,.7)"/>'
+    +'<line x1="38" y1="6" x2="38" y2="46" stroke="rgba(200,146,42,.3)" stroke-width="1" stroke-dasharray="3 2"/>'
+    +'</svg>';
+}
+function svgUnsure() {
+  return '<svg viewBox="0 0 80 52" fill="none" xmlns="http://www.w3.org/2000/svg">'
+    +'<rect x="4" y="10" width="32" height="32" rx="3" fill="rgba(200,146,42,.07)" stroke="rgba(200,146,42,.25)" stroke-width="1.2" stroke-dasharray="3 2"/>'
+    +'<rect x="44" y="6" width="32" height="40" rx="3" fill="rgba(200,146,42,.07)" stroke="rgba(200,146,42,.25)" stroke-width="1.2" stroke-dasharray="3 2"/>'
+    +'<text x="40" y="32" text-anchor="middle" font-size="20" fill="rgba(200,146,42,.5)">?</text>'
+    +'</svg>';
+}
+
+/* ══════════════════════════════════════════
+   QUICK FIND
+══════════════════════════════════════════ */
+function openQF(e) {
+  if (e) e.preventDefault();
+  document.getElementById('qf-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeQF() {
+  document.getElementById('qf-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeQFOutside(e) {
+  if (e.target.id === 'qf-overlay') closeQF();
+}
+function qfPick(el, grp, multi) {
+  if (!multi) {
+    document.querySelectorAll('.chip[data-g="' + grp + '"]').forEach(function(c) { c.classList.remove('sel'); });
+    el.classList.toggle('sel');
+    if (el.classList.contains('sel')) { qfAns[grp] = el.dataset.v; } else { delete qfAns[grp]; }
+  } else {
+    el.classList.toggle('sel');
+    if (!qfAns[grp]) qfAns[grp] = [];
+    var idx = qfAns[grp].indexOf(el.dataset.v);
+    if (idx === -1) { qfAns[grp].push(el.dataset.v); } else { qfAns[grp].splice(idx, 1); }
+    if (qfAns[grp].length === 0) delete qfAns[grp];
+  }
+  document.getElementById('qf-go').disabled = Object.keys(qfAns).length === 0;
+}
+function runQF() { closeQF(); showResults(qfAns, true); }
+
+/* ══════════════════════════════════════════
+   RENDER QUESTION
+══════════════════════════════════════════ */
+function renderQ(i) {
+  var q = Qs[i];
+  var pct = Math.round((i / Qs.length) * 100);
+  document.getElementById('step-label').textContent = 'Question ' + (i + 1) + ' of ' + Qs.length;
+  document.getElementById('step-pct').textContent = pct + '%';
+  document.getElementById('qz-fill').style.width = pct + '%';
+  var isLast = i === Qs.length - 1;
+  var hasAns = q.type === 'multi' ? (qAns[q.id] || []).length > 0 : !!qAns[q.id];
+  var card = document.getElementById('quiz-card');
+  card.innerHTML = '';
+
+  // Header
+  var hdr = document.createElement('div');
+  hdr.innerHTML = '<div class="q-num">Question ' + (i+1) + ' / ' + Qs.length + '</div>'
+    + '<div class="q-text">' + q.text + '</div>'
+    + '<div class="q-sub">' + q.sub + '</div>';
+  card.appendChild(hdr);
+
+  // Options
+  var optWrap = document.createElement('div');
+
+  if (q.type === 'visual-body') {
+    optWrap.className = 'body-grid';
+    var svgMap = {strat: svgStrat, tele: svgTele, lespaul: svgLesPaul, flyingv: svgFlyingV, hollow: svgHollow, none: svgNone};
+    q.opts.forEach(function(o) {
+      var btn = document.createElement('button');
+      btn.className = 'body-card' + (o.v === 'none' ? ' body-card-none' : '') + (qAns[q.id] === o.v ? ' sel' : '');
+      btn.dataset.qid = q.id;
+      btn.dataset.val = o.v;
+      btn.innerHTML = svgMap[o.v]()
+        + '<span class="body-card-name">' + o.l + '</span>'
+        + '<span class="body-card-sub">' + o.sub + '</span>'
+        + (o.genres ? '<span class="body-card-genres">' + o.genres + '</span>' : '')
+        + (o.bands ? '<span class="body-card-bands">' + o.bands + '</span>' : '');
+      btn.addEventListener('click', function() { pickVisual(this); });
+      optWrap.appendChild(btn);
+    });
+
+  } else if (q.type === 'visual-pickup') {
+    optWrap.className = 'pickup-grid';
+    var svgPMap = {single: svgSingleCoil, humbucker: svgHumbucker, unsure: svgUnsure};
+    q.opts.forEach(function(o) {
+      var btn = document.createElement('button');
+      btn.className = 'pickup-card' + (qAns[q.id] === o.v ? ' sel' : '');
+      btn.dataset.qid = q.id;
+      btn.dataset.val = o.v;
+      btn.innerHTML = '<div class="pickup-visual">' + svgPMap[o.v]() + '<span class="pickup-label-sm">' + o.l + '</span></div>'
+        + '<div class="pickup-info">'
+        + '<div class="pickup-name">' + o.l + '</div>'
+        + '<div class="pickup-sub">' + o.sub + '</div>'
+        + '<div class="pickup-tone">' + o.tone + '</div>'
+        + (o.genres ? '<div class="pickup-meta"><span class="pickup-tag">' + o.genres + '</span></div>' : '')
+        + (o.artists ? '<div class="pickup-meta" style="margin-top:.3rem"><span class="pickup-tag-gold">' + o.artists + '</span></div>' : '')
+        + '</div>';
+      btn.addEventListener('click', function() { pickVisual(this); });
+      optWrap.appendChild(btn);
+    });
+
+  } else {
+    optWrap.className = 'opts-grid';
+    q.opts.forEach(function(o) {
+      var sel = q.type === 'multi' ? (qAns[q.id] || []).includes(o.v) : qAns[q.id] === o.v;
+      var btn = document.createElement('button');
+      btn.className = 'opt' + (sel ? ' sel' : '');
+      btn.dataset.qid = q.id;
+      btn.dataset.val = o.v;
+      btn.dataset.type = q.type;
+      btn.innerHTML = '<span class="opt-ic">' + (o.ic || '') + '</span><span>' + o.l
+        + (o.d ? '<br><small style="color:var(--muted);font-size:.74rem;font-weight:400">' + o.d + '</small>' : '')
+        + '</span>';
+      btn.addEventListener('click', function() { pickOpt(this); });
+      optWrap.appendChild(btn);
+    });
+  }
+  card.appendChild(optWrap);
+
+  // Nav
+  var nav = document.createElement('div');
+  nav.className = 'qz-nav';
+  var backBtn = document.createElement('button');
+  backBtn.className = 'btn-back';
+  backBtn.textContent = '← Back';
+  if (i === 0) backBtn.style.visibility = 'hidden';
+  backBtn.addEventListener('click', goBack);
+  var nextBtn = document.createElement('button');
+  nextBtn.className = 'btn-next';
+  nextBtn.id = 'btn-next';
+  nextBtn.textContent = isLast ? 'See my guitars →' : 'Next →';
+  nextBtn.disabled = !hasAns;
+  nextBtn.addEventListener('click', goNext);
+  nav.appendChild(backBtn);
+  nav.appendChild(nextBtn);
+  card.appendChild(nav);
+}
+
+function pickVisual(btn) {
+  var qid = btn.dataset.qid;
+  qAns[qid] = btn.dataset.val;
+  btn.parentElement.querySelectorAll('button').forEach(function(b) { b.classList.remove('sel'); });
+  btn.classList.add('sel');
+  document.getElementById('btn-next').disabled = false;
+}
+
+function pickOpt(btn) {
+  var qid = btn.dataset.qid;
+  var val = btn.dataset.val;
+  var type = btn.dataset.type;
+  if (type === 'single') {
+    qAns[qid] = val;
+    btn.parentElement.querySelectorAll('button').forEach(function(b) { b.classList.remove('sel'); });
+    btn.classList.add('sel');
+  } else {
+    if (!qAns[qid]) qAns[qid] = [];
+    var idx = qAns[qid].indexOf(val);
+    if (idx === -1) { qAns[qid].push(val); btn.classList.add('sel'); }
+    else { qAns[qid].splice(idx, 1); btn.classList.remove('sel'); }
+  }
+  var ok = type === 'multi' ? qAns[qid].length > 0 : !!qAns[qid];
+  document.getElementById('btn-next').disabled = !ok;
+}
+
+function goNext() {
+  if (curQ < Qs.length - 1) { curQ++; renderQ(curQ); }
+  else { showResults(qAns, false); }
+}
+function goBack() {
+  if (curQ > 0) { curQ--; renderQ(curQ); }
+}
+
+/* ══════════════════════════════════════════
+   SCORING
+══════════════════════════════════════════ */
+function score(g, a) {
+  var s = 0, bf = g.bestFor;
+
+  /* Genre match — strict. If user picked genres and guitar has NONE of them, return 0 */
+  var genreScore = 0;
+  if (a.genres && Array.isArray(a.genres) && a.genres.length > 0 && bf.genres) {
+    var matches = a.genres.filter(function(gn) { return bf.genres.includes(gn); });
+    if (matches.length === 0) return 0; /* hard exclude — no genre overlap at all */
+    genreScore = matches.length * 8;
+
+    /* Extra boost for exact primary genre match (first selected genre) */
+    if (bf.genres.includes(a.genres[0])) genreScore += 10;
+
+    /* Penalty if guitar has genres that strongly conflict with selection */
+    var metalGenres = ['metal','punk'];
+    var softGenres = ['pop','folk','country','worship'];
+    var userWantsMetal = a.genres.some(function(g) { return metalGenres.includes(g); });
+    var userWantsSoft = a.genres.some(function(g) { return softGenres.includes(g); });
+
+    if (userWantsMetal) {
+      /* Metal users ONLY see guitars with metal in their genre list */
+      var hasMetal = bf.genres.some(function(g) { return g === 'metal'; });
+      if (!hasMetal) return 0;
+    }
+    if (userWantsSoft && !userWantsMetal) {
+      /* Soft genre users never see metal/punk-only guitars */
+      var onlyHeavy = bf.genres.every(function(g) { return ['metal','punk'].includes(g); });
+      if (onlyHeavy) return 0;
+    }
+    /* Jazz users only see guitars that include jazz */
+    var userWantsJazz = a.genres.some(function(g) { return g === 'jazz'; });
+    var userWantsBlues = a.genres.some(function(g) { return g === 'blues'; });
+    if (userWantsJazz && !userWantsBlues && !userWantsMetal) {
+      var hasJazz = bf.genres.some(function(g) { return ['jazz','blues'].includes(g); });
+      if (!hasJazz) return 0;
+    }
+  }
+  s += genreScore;
+
+  if (a.skill && bf.skill.includes(a.skill)) s += 30;
+  if (a.budget && bf.budget.includes(a.budget)) s += 25;
+  if (a.type && (bf.type.includes(a.type) || bf.type.includes('unsure'))) s += 20;
+  if (a.bodyStyle && bf.bodyStyle && (bf.bodyStyle.includes(a.bodyStyle) || bf.bodyStyle.includes('none'))) s += 10;
+  if (a.pickups && bf.pickups && (bf.pickups.includes(a.pickups) || bf.pickups.includes('unsure'))) s += 8;
+  return s;
+}
+
+function why(g, a) {
+  var r = [];
+  if (a.skill === 'beginner') r.push('beginner-friendly');
+  else if (a.skill === 'advanced') r.push('professional-grade');
+  if (a.genres && Array.isArray(a.genres)) {
+    var sh = a.genres.filter(function(gn) { return g.bestFor.genres && g.bestFor.genres.includes(gn); });
+    if (sh.length) r.push('ideal for ' + sh.slice(0, 2).join(' & '));
+  }
+  if (a.use === 'gigging') r.push('stage-ready');
+  if (a.use === 'recording') r.push('great studio tone');
+  if (a.use === 'travel') r.push('travel-friendly');
+  if (a.pickups === 'single' && g.bestFor.pickups && g.bestFor.pickups.includes('single')) r.push('bright single-coil clarity');
+  if (a.pickups === 'humbucker' && g.bestFor.pickups && g.bestFor.pickups.includes('humbucker')) r.push('warm humbucker tone');
+  return r.length ? 'This guitar offers ' + r.join(', ') + '.' : 'A strong all-around match for your selections.';
+}
+
+function stars(r) {
+  var s = '';
+  for (var i = 0; i < Math.floor(r); i++) s += '★';
+  if (r % 1 >= 0.5) s += '½';
+  return s;
+}
+
+/* ══════════════════════════════════════════
+   SHOW RESULTS
+══════════════════════════════════════════ */
+/* Track state for load more */
+var _allRanked = [];
+var _shownCount = 0;
+var _currentAnswers = {};
+var _BATCH = 5;
+
+function showResults(a, fromQF) {
+  _currentAnswers = a;
+
+  /* Strict acoustic filter: only show acoustic/acoustic-electric guitars
+     when the user explicitly selected those types. Otherwise exclude them. */
+  var wantsAcoustic = a.type === 'acoustic' || a.type === 'acoustic-electric';
+  var wantsElectric = a.type === 'electric';
+
+  var pool = GUITARS.filter(function(g) {
+    var types = g.bestFor.type || [];
+    var isAcoustic = types.indexOf('acoustic') > -1 &&
+                     types.indexOf('electric') === -1 &&
+                     types.indexOf('unsure') === -1;
+    var isAcousticElectric = types.indexOf('acoustic-electric') > -1 &&
+                              types.indexOf('electric') === -1;
+    var isElectric = types.indexOf('electric') > -1;
+
+    if (wantsElectric) {
+      /* Strictly exclude pure acoustic and acoustic-electric guitars */
+      return isElectric;
+    }
+    if (a.type === 'acoustic') {
+      return isAcoustic || isAcousticElectric;
+    }
+    if (a.type === 'acoustic-electric') {
+      return isAcousticElectric || isAcoustic;
+    }
+    /* unsure or no type selected — show everything */
+    return true;
+  });
+
+  _allRanked = pool.map(function(g) {
+    return Object.assign({}, g, {_s: score(g, a)});
+  }).sort(function(x, y) { return y._s - x._s; });
+
+  _shownCount = 0;
+
+  document.getElementById('qz-fill').style.width = '100%';
+  document.getElementById('quiz-section').style.display = 'none';
+  var rs = document.getElementById('results-section');
+  rs.style.display = 'block';
+  setTimeout(function() { rs.scrollIntoView({behavior: 'smooth', block: 'start'}); }, 50);
+
+  var sm = {beginner: 'beginner', intermediate: 'intermediate player', advanced: 'advanced guitarist'};
+  document.getElementById('results-intro').textContent = fromQF
+    ? 'Based on your Quick Find selections, here are your top matches.'
+    : 'Based on your quiz answers, here are the best guitars for a ' + (sm[a.skill] || 'guitarist') + '.';
+
+  document.getElementById('guitars-grid').innerHTML = '';
+  _appendCards(_BATCH, true);
+}
+
+function _appendCards(count, isFirst) {
+  var grid = document.getElementById('guitars-grid');
+  var batch = _allRanked.slice(_shownCount, _shownCount + count);
+  batch.forEach(function(g, i) {
+    var card = document.createElement('div');
+    card.className = 'g-card';
+    card.style.animationDelay = (i * 0.08) + 's';
+    var isFirst0 = isFirst && i === 0;
+    var imgHtml;
+    if (g.productImg) {
+      imgHtml = '<div class="g-img g-img-photo">'
+        + '<img src="' + g.productImg + '" alt="' + g.name + '" loading="lazy"'
+        + ' onerror="this.parentElement.className=\'g-img\';this.innerHTML=\'<span class=g-img-fallback>' + g.emoji + '</span>' + (isFirst0 ? '<div class=best-badge>Best Match</div>' : '') + '\'">'
+        + (isFirst0 ? '<div class="best-badge">Best Match</div>' : '')
+        + '</div>';
+    } else {
+      imgHtml = '<div class="g-img"><span class="g-img-fallback">' + g.emoji + '</span>'
+        + (isFirst0 ? '<div class="best-badge">Best Match</div>' : '') + '</div>';
+    }
+    card.innerHTML = imgHtml
+      + '<div class="g-body">'
+      + '<div class="g-brand">' + g.brand + '</div>'
+      + '<div class="g-name">' + g.name + '</div>'
+      + (g.bands ? '<div class="g-bands">🎵 ' + g.bands + '</div>' : '')
+      + '<div class="g-why">' + why(g, _currentAnswers) + '</div>'
+      + '<div class="g-specs">' + g.specs.map(function(s) { return '<span class="spec">' + s + '</span>'; }).join('') + '</div>'
+      + '<div class="g-foot">'
+      + '<div><div class="g-price">' + g.price + '</div>'
+      + '<div class="g-rating"><span class="g-stars">' + stars(g.rating) + '</span> ' + g.rating + ' (' + g.reviews.toLocaleString() + ' reviews)</div></div>'
+      + '<a class="btn-deal" href="' + g.affiliate + '" target="_blank" rel="noopener nofollow">View Deal →</a>'
+      + '</div></div>';
+    grid.appendChild(card);
+  });
+  _shownCount += batch.length;
+
+  /* Update load more button */
+  var btn = document.getElementById('btn-load-more');
+  if (btn) {
+    var remaining = _allRanked.length - _shownCount;
+    if (remaining <= 0) {
+      btn.textContent = 'No more matches';
+      btn.disabled = true;
+    } else {
+      btn.textContent = 'Load ' + Math.min(remaining, _BATCH) + ' more guitars →';
+      btn.disabled = false;
+    }
+  }
+}
+
+function loadMore() {
+  if (_shownCount >= _allRanked.length) return;
+  var btn = document.getElementById('btn-load-more');
+  if (btn) btn.disabled = true;
+  /* Scroll to bottom of current grid first */
+  var grid = document.getElementById('guitars-grid');
+  var lastCard = grid.lastElementChild;
+  _appendCards(_BATCH, false);
+  setTimeout(function() {
+    if (lastCard && lastCard.nextElementSibling) {
+      lastCard.nextElementSibling.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }
+  }, 100);
+}
+
+/* ══════════════════════════════════════════
+   EMAIL CAPTURE
+══════════════════════════════════════════ */
+function subEmail() {
+  var v = document.getElementById('email-input').value.trim();
+  if (!v || !v.includes('@')) { showToast('Please enter a valid email.'); return; }
+  console.log('[Email]', v);
+  document.getElementById('email-cap').innerHTML = '<div style="text-align:center;width:100%;color:var(--cream)"><div style="font-size:1.5rem;margin-bottom:.5rem">🎸</div><div style="font-family:var(--font-d);font-size:1.2rem;margin-bottom:.3rem">You\'re in!</div><div style="opacity:.6;font-size:.86rem">Gear picks and guides coming your way.</div></div>';
+}
+
+/* ══════════════════════════════════════════
+   RETAKE
+══════════════════════════════════════════ */
+function retake() {
+  curQ = 0; qAns = {}; qfAns = {};
+  document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('sel'); });
+  document.getElementById('qf-go').disabled = true;
+  document.getElementById('results-section').style.display = 'none';
+  document.getElementById('quiz-section').style.display = 'block';
+  renderQ(0);
+  document.getElementById('quiz-section').scrollIntoView({behavior: 'smooth'});
+}
+
+/* ══════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════ */
+function showToast(m) {
+  var t = document.getElementById('toast');
+  t.textContent = m;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3200);
+}
+
+/* ── INIT ── */
+document.getElementById('qf-go').disabled = true;
+renderQ(0);
+</script>
+</body>
+</html>
